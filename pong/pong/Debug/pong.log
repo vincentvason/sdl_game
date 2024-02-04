@@ -1,0 +1,31 @@
+﻿  main.cpp
+main.obj : error LNK2019: unresolved external symbol _SDL_GetError referenced in function "bool __cdecl init(void)" (?init@@YA_NXZ)
+main.obj : error LNK2019: unresolved external symbol _SDL_MapRGB referenced in function "public: bool __thiscall LTexture::loadFromFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?loadFromFile@LTexture@@QAE_NV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+main.obj : error LNK2019: unresolved external symbol _SDL_FreeSurface referenced in function "public: bool __thiscall LTexture::loadFromFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?loadFromFile@LTexture@@QAE_NV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+main.obj : error LNK2019: unresolved external symbol _SDL_SetColorKey referenced in function "public: bool __thiscall LTexture::loadFromFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?loadFromFile@LTexture@@QAE_NV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+main.obj : error LNK2019: unresolved external symbol _SDL_CreateWindow referenced in function "bool __cdecl init(void)" (?init@@YA_NXZ)
+main.obj : error LNK2019: unresolved external symbol _SDL_DestroyWindow referenced in function "void __cdecl close(void)" (?close@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol _SDL_PollEvent referenced in function _SDL_main
+main.obj : error LNK2019: unresolved external symbol _SDL_SetHint referenced in function "bool __cdecl init(void)" (?init@@YA_NXZ)
+main.obj : error LNK2019: unresolved external symbol _SDL_CreateRenderer referenced in function "bool __cdecl init(void)" (?init@@YA_NXZ)
+main.obj : error LNK2019: unresolved external symbol _SDL_CreateTextureFromSurface referenced in function "public: bool __thiscall LTexture::loadFromFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?loadFromFile@LTexture@@QAE_NV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+main.obj : error LNK2019: unresolved external symbol _SDL_SetTextureColorMod referenced in function "public: void __thiscall LTexture::setColor(unsigned char,unsigned char,unsigned char)" (?setColor@LTexture@@QAEXEEE@Z)
+main.obj : error LNK2019: unresolved external symbol _SDL_SetTextureAlphaMod referenced in function "public: void __thiscall LTexture::setAlpha(unsigned char)" (?setAlpha@LTexture@@QAEXE@Z)
+main.obj : error LNK2019: unresolved external symbol _SDL_SetTextureBlendMode referenced in function "public: void __thiscall LTexture::setBlendMode(enum SDL_BlendMode)" (?setBlendMode@LTexture@@QAEXW4SDL_BlendMode@@@Z)
+main.obj : error LNK2019: unresolved external symbol _SDL_SetRenderDrawColor referenced in function "bool __cdecl init(void)" (?init@@YA_NXZ)
+main.obj : error LNK2019: unresolved external symbol _SDL_RenderClear referenced in function _SDL_main
+main.obj : error LNK2019: unresolved external symbol _SDL_RenderDrawRect referenced in function _SDL_main
+main.obj : error LNK2019: unresolved external symbol _SDL_RenderCopyEx referenced in function "public: void __thiscall LTexture::render(int,int,struct SDL_Rect *,double,struct SDL_Point *,enum SDL_RendererFlip)" (?render@LTexture@@QAEXHHPAUSDL_Rect@@NPAUSDL_Point@@W4SDL_RendererFlip@@@Z)
+main.obj : error LNK2019: unresolved external symbol _SDL_RenderPresent referenced in function _SDL_main
+main.obj : error LNK2019: unresolved external symbol _SDL_DestroyTexture referenced in function "public: void __thiscall LTexture::free(void)" (?free@LTexture@@QAEXXZ)
+main.obj : error LNK2019: unresolved external symbol _SDL_DestroyRenderer referenced in function "void __cdecl close(void)" (?close@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol _SDL_Init referenced in function "bool __cdecl init(void)" (?init@@YA_NXZ)
+main.obj : error LNK2019: unresolved external symbol _SDL_Quit referenced in function "void __cdecl close(void)" (?close@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol _IMG_Init referenced in function "bool __cdecl init(void)" (?init@@YA_NXZ)
+main.obj : error LNK2019: unresolved external symbol _IMG_Quit referenced in function "void __cdecl close(void)" (?close@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol _IMG_Load referenced in function "public: bool __thiscall LTexture::loadFromFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?loadFromFile@LTexture@@QAE_NV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+MSVCRTD.lib(exe_main.obj) : error LNK2019: unresolved external symbol _main referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
+C:\vclib\SDL2-2.28.5\lib\x64\SDL2.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\vclib\SDL2-2.28.5\lib\x64\SDL2main.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\vclib\SDL2_image-2.8.2\lib\x64\SDL2_image.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\ASUS\Documents\GitHub\sdl_game\pong\Debug\pong.exe : fatal error LNK1120: 26 unresolved externals

@@ -1,2 +1,5 @@
-﻿  main.cpp
-  tictactoe.vcxproj -> C:\Users\ASUS\source\repos\tictactoe\x64\Debug\tictactoe.exe
+﻿  LButton.cpp
+  LTexture.cpp
+  main.cpp
+  Generating Code...
+  tictactoe.vcxproj -> C:\Users\ASUS\Documents\GitHub\sdl_game\tictactoe\x64\Debug\tictactoe.exe
