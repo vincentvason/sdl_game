@@ -10,6 +10,7 @@ const int SCREEN_HEIGHT = 640;  //32*20
 LTexture gLogoTexture;
 LTexture gIconTexture;
 LTexture gWitch1Texture;
+LTexture gBulletTexture;
 
 //Text list
 LTexture gTextTexture;
@@ -81,37 +82,32 @@ bool loadMedia()
 	//Loading success flag
 	bool success = true;
 
-	//Load press texture
+	//Load logo texture
 	if (!gLogoTexture.loadFromFile("img/logo.bmp"))
 	{
 		printf("Failed to load \"img/logo.bmp\"!\n");
 		success = false;
 	}
-	else
-	{
-		gLogoTexture.num = 1;
-	}
 
-	//Load press texture
+	//Load witch1 texture
 	if (!gWitch1Texture.loadFromFile("img/witch1.png"))
 	{
 		printf("Failed to load \"img/witch1.png\"!\n");
 		success = false;
 	}
-	else
-	{
-		gWitch1Texture.num = 2;
-	}
 
-	//Load press texture
+	//Load heart texture
 	if (!gIconTexture.loadFromFile("img/heart.png"))
 	{
 		printf("Failed to load \"img/heart.png\"!\n");
 		success = false;
 	}
-	else
+
+	//Load bullet texture
+	if (!gBulletTexture.loadFromFile("img/bullet.png"))
 	{
-		gIconTexture.num = 3;
+		printf("Failed to load \"img/bullet.png\"!\n");
+		success = false;
 	}
 
 	//Open the font

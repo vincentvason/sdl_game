@@ -1,5 +1,12 @@
-﻿  entity_player.cpp
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.h(28,26): warning C4305: 'initializing': truncation from 'double' to 'const float'
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(6,10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(7,10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+﻿  command.cpp
+  game.cpp
+  game_ingame.cpp
+  game_menu.cpp
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_menu.cpp(25,43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_menu.cpp(28,43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_menu.cpp(31,100): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_menu.cpp(31,43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  main.cpp
+  Generating Code...
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_ingame.cpp(129): warning C4715: 'InGameScene::updateFreeBulletIndex': not all control paths return a value
   WitchInTheWoods.vcxproj -> C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\x64\Debug\WitchInTheWoods.exe

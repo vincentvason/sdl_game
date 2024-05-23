@@ -1,8 +1,6 @@
 #include "game.h"
 #include "load.h"
 
-Player p1 = Player(&gWitch1Texture);
-
 GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 {
 	if (e->type == SDL_KEYDOWN && e->key.repeat == 0)
@@ -17,8 +15,6 @@ GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 						  else break;
 		}
 	}
-
-	p1.handleEvent(e);
 
 	return nullptr;
 }
@@ -38,8 +34,12 @@ void InGameScene::update(Game& game)
 	SDL_RenderFillRect(gRenderer, &stage);
 
 	//Render Player
+	pBulletIndex = updateFreeBulletIndex();
 	p1.update();
-	
+	for(int i = 0; i < 8; i++)
+	{
+		vBullet[i].update();
+	}
 }
 
 void InGameScene::updatePlayerHUD(Game& game)
@@ -102,10 +102,28 @@ void InGameScene::updateBottomHUD(Game& game)
 {
 	char string[11];
 	
-	sprintf_s(string, 11, "STAGE %03d", stage);
+	sprintf_s(string, 11, "STAGE %03d", pStage);
 	gTextTexture.loadFromRenderedText(string, gTextColor_White);
 	gTextTexture.render(0, 608);
 	sprintf_s(string, 11, "HI %07d", game.getHighScore());
 	gTextTexture.loadFromRenderedText(string, gTextColor_White);
 	gTextTexture.render(0, 624);
+}
+
+int InGameScene::updateFreeBulletIndex()
+{
+	int i = 0;
+	for (Bullet bullet : vBullet)
+	{
+		if (bullet.getActive() == false)
+		{
+			return i;
+		}
+		else
+		{
+			i++;
+		}
+	}
+
+	if (i >= pBulletSlot) return 0;
 }

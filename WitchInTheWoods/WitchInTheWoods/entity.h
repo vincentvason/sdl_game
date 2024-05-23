@@ -1,5 +1,5 @@
 #pragma once
-#include "game.h"
+#include "load.h"
 
 class Entity
 {
@@ -7,48 +7,22 @@ public:
 	virtual void update() {};
 
 protected:
-	int LocXToPosX(float locX) { return (int)(16.0 + (locX * 32.0)); };
-	int LocYToPosY(float locY) { return (int)(32.0 + (locY * 32.0)); };
+	const int STAGE_X_BEGIN = 16;
+	const int STAGE_X_END = STAGE_X_BEGIN + (13 * 32);
+	const int STAGE_Y_BEGIN = 32;
+	const int STAGE_Y_END = STAGE_Y_BEGIN + (17 * 32);
 
 	bool isActive = false;
-
-	static const int SPRITE_WIDTH = 32;
-	static const int SPRITE_HEIGHT = 32;
-
-	int mLocX = 0, mLocY = 0;
 	int mVelX = 0, mVelY = 0;
 
-	SDL_Rect mCollider;
-	LTexture* mSprite;
-};
+	SDL_Rect mCollider = { 0, 0, 0, 0 };
+	LTexture* mSprite = nullptr;
 
-class Object : public Entity
-{
-public:
-	virtual void update() {};
-
-protected:
-	bool isActive = false;
-
-	float mLocX = 0, mLocY = 0;
-	float mVelX = 0, mVelY = 0;
-
-	SDL_Rect mCollider;
-	LTexture* mSprite;
-};
-
-class Actor : public Entity
-{
-public:
-	virtual void handleEvent(SDL_Event* e) {};
-	virtual void update() {};
-
-protected:
-	bool isActive = false;
-
-	float mLocX = 0, mLocY = 0;
-	float mVelX = 0, mVelY = 0;
-
-	SDL_Rect mCollider;
-	LTexture* mSprite;
+	enum Facing {
+		FACING_DOWN = 0,
+		FACING_LEFT = 4,
+		FACING_UP = 8,
+		FACING_RIGHT = 12,
+		DYING = 16
+	};
 };

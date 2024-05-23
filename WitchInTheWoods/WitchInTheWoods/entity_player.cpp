@@ -1,44 +1,27 @@
 #include "entity_player.h"
 
-Player::Player(LTexture* sprite, int locX, int locY)
+Player::Player(LTexture* sprite, int x, int y)
 {
 	isActive = true;
-	mLocX = locX;
-	mLocY = locY;
 	mSprite = sprite;
 
-	mCollider.x = LocXToPosX(mLocX);
-	mCollider.y = LocYToPosY(mLocY);
+	mCollider.x = x;
+	mCollider.y = y;
 	mCollider.w = 32;
 	mCollider.h = 32;
 }
 
-void Player::handleEvent(SDL_Event* e)
-{
-	if (e->key.state == SDL_PRESSED)
-	{
-		//Adjust the velocity
-		switch (e->key.keysym.sym)
-		{
-		case SDLK_w: move(FACING_UP); break;
-		case SDLK_s: move(FACING_DOWN); break;
-		case SDLK_a: move(FACING_LEFT); break;
-		case SDLK_d: move(FACING_RIGHT); break;
-		}
-	}
-}
-
 void Player::update()
 {
-	mLocX = (mLocX < DEFAULT_VEL && mVelX < 0) ? -mVelX : mLocX + mVelX;
-	mLocX = (mLocX > (STAGE_SIZE_X - 1 - DEFAULT_VEL) && mVelX > 0) ? STAGE_SIZE_X - 1 : mLocX + mVelX;
-	mLocY = (mLocY < DEFAULT_VEL && mVelY < 0) ? -mVelY : mLocY + mVelY;
-	mLocY = (mLocY > (STAGE_SIZE_Y - 1 - DEFAULT_VEL) && mVelY > 0) ? STAGE_SIZE_Y - 1 : mLocY + mVelY;
+	if (mCollider.x + mVelX < STAGE_X_BEGIN) mCollider.x = STAGE_X_BEGIN;
+	else if (mCollider.x + mVelX > STAGE_X_END) mCollider.x = STAGE_X_END;
+	else mCollider.x += mVelX;
 
-	mCollider.x = LocXToPosX(mLocX);
-	mCollider.y = LocYToPosY(mLocY);
+	if (mCollider.y + mVelY < STAGE_Y_BEGIN) mCollider.y = STAGE_Y_BEGIN;
+	else if (mCollider.y + mVelY > STAGE_Y_END) mCollider.y = STAGE_Y_END;
+	else mCollider.y += mVelY;
 
-	printf("%f, %f / %d, %d\n", mLocX, mLocY, mCollider.x, mCollider.y);
+	printf("%d, %d, %s\n", mCollider.x, mCollider.y, mSprite->getFilePath().c_str());
 
 	SDL_Rect clip = { 32 * (mAnimFacing + (int)mAnimWalking), 0, 32, 32 };
 	mSprite->render(mCollider.x, mCollider.y, &clip);
@@ -78,4 +61,9 @@ void Player::move(enum Facing facing)
 	{
 		mAnimWalking = 0;
 	}
+}
+
+void Player::shoot()
+{
+	mAnimWalking = 3;	
 }

@@ -48,11 +48,12 @@ public:
 	int getWidth();
 	int getHeight();
 
-	int num;
-
+	//return filePath
+	std::string getFilePath() { return filePath; };
 private:
 	//The actual hardware texture
 	SDL_Texture* mTexture;
+	std::string filePath;
 
 	//Image dimensions
 	int mWidth;
