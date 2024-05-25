@@ -19,8 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="command.cpp" />
+    <ClCompile Include="entity.cpp" />
     <ClCompile Include="entity_bullet.cpp" />
+    <ClCompile Include="entity_enemy.cpp" />
     <ClCompile Include="entity_player.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="game_ingame.cpp" />
@@ -30,9 +31,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="command.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="entity_bullet.h" />
+    <ClInclude Include="entity_enemy.h" />
     <ClInclude Include="entity_player.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="load.h" />

@@ -9,6 +9,7 @@ const int SCREEN_HEIGHT = 640;  //32*20
 //Image list
 LTexture gLogoTexture;
 LTexture gIconTexture;
+LTexture gMonster1Texture;
 LTexture gWitch1Texture;
 LTexture gBulletTexture;
 
@@ -107,6 +108,13 @@ bool loadMedia()
 	if (!gBulletTexture.loadFromFile("img/bullet.png"))
 	{
 		printf("Failed to load \"img/bullet.png\"!\n");
+		success = false;
+	}
+
+	//Load monster texture
+	if (!gMonster1Texture.loadFromFile("img/monster1.png"))
+	{
+		printf("Failed to load \"img/monster1.png\"!\n");
 		success = false;
 	}
 

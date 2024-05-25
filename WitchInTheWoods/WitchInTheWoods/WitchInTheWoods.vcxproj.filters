@@ -39,7 +39,10 @@
     <ClCompile Include="entity_bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="command.cpp">
+    <ClCompile Include="entity_enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,7 +65,7 @@
     <ClInclude Include="entity_bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="command.h">
+    <ClInclude Include="entity_enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

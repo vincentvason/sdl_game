@@ -16,6 +16,7 @@ extern const int SCREEN_HEIGHT;
 extern LTexture gLogoTexture;
 extern LTexture gIconTexture;
 extern LTexture gWitch1Texture;
+extern LTexture gMonster1Texture;
 extern LTexture gBulletTexture;
 
 //Text Bank

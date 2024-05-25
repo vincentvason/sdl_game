@@ -1,6 +1,6 @@
 #include "entity_player.h"
 
-Player::Player(LTexture* sprite, int x, int y)
+PlayerEntity::PlayerEntity(LTexture* sprite, int x, int y)
 {
 	isActive = true;
 	mSprite = sprite;
@@ -11,7 +11,17 @@ Player::Player(LTexture* sprite, int x, int y)
 	mCollider.h = 32;
 }
 
-void Player::update()
+SDL_Rect PlayerEntity::getPosition()
+{
+	return mCollider;
+}
+
+Entity::Facing PlayerEntity::getFacing()
+{
+	return mAnimFacing;
+}
+
+void PlayerEntity::update()
 {
 	if (mCollider.x + mVelX < STAGE_X_BEGIN) mCollider.x = STAGE_X_BEGIN;
 	else if (mCollider.x + mVelX > STAGE_X_END) mCollider.x = STAGE_X_END;
@@ -30,25 +40,29 @@ void Player::update()
 	mVelY = 0;
 }
 
-void Player::move(enum Facing facing)
+void PlayerEntity::move(enum Facing facing)
 {
 	switch (facing)
 	{
 	case FACING_UP:
 		mAnimFacing = FACING_UP;
+		mVelX = 0;
 		mVelY = -DEFAULT_VEL;
 		break;
 	case FACING_DOWN:
 		mAnimFacing = FACING_DOWN;
+		mVelX = 0;
 		mVelY = DEFAULT_VEL;
 		break;
 	case FACING_LEFT:
 		mAnimFacing = FACING_LEFT;
 		mVelX = -DEFAULT_VEL;
+		mVelY = 0;
 		break;
 	case FACING_RIGHT:
 		mAnimFacing = FACING_RIGHT;
 		mVelX = DEFAULT_VEL;
+		mVelY = 0;
 		break;
 	}
 
@@ -63,7 +77,7 @@ void Player::move(enum Facing facing)
 	}
 }
 
-void Player::shoot()
+void PlayerEntity::shoot()
 {
 	mAnimWalking = 3;	
 }

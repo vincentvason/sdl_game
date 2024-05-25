@@ -3,6 +3,7 @@
 #include "load.h"
 #include "entity_bullet.h"
 #include "entity_player.h"
+#include "entity_enemy.h"
 
 
 class Game;
@@ -55,17 +56,13 @@ public:
 	void update(Game& game);
 
 private:
-	
 	void updatePlayerHUD(Game& game);
 	void updateBottomHUD(Game& game);
-	int updateFreeBulletIndex();
 
 	int pScore[2] = { 0 }, pLife[2] = { 3 };
 	int pStage = 1;
-	int pBulletSlot = 8;
-	int pBulletIndex = 0;
 
-	Player p1 = Player(&gWitch1Texture);
-	Bullet pBullet = Bullet(&gBulletTexture);
-	std::vector<Bullet> vBullet = std::vector<Bullet>(pBulletSlot, Bullet(&gBulletTexture));
+	PlayerEntity p1 = PlayerEntity(&gWitch1Texture);
+	EnemyEntity en = EnemyEntity(&gMonster1Texture, 100, 100);
+	BulletGroup bullets;
 };

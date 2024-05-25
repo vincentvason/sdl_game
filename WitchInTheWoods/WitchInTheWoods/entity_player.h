@@ -1,12 +1,18 @@
 #pragma once
+#include "load.h"
 #include "entity.h"
 #include "entity_bullet.h"
 
-class Player : public Entity
+class PlayerEntity : public Entity
 {
 public:
-	Player(LTexture* sprite, int x = 0, int y = 0);
+	PlayerEntity(LTexture* sprite, int x = 0, int y = 0);
 	void update();
+
+	void move(enum Facing facing);
+	void shoot();
+	SDL_Rect getPosition();
+	Entity::Facing getFacing();
 
 protected:
 	bool isActive = false;
@@ -25,6 +31,5 @@ private:
 	const int WALKING_FRAME = 3;
 	const int ATTACK_SPRITE = 3;
 
-	void move(enum Facing facing);
-	void shoot();
+	
 };

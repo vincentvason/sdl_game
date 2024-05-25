@@ -1,12 +1,17 @@
 #include "entity_bullet.h"
 
-Bullet::Bullet(LTexture* sprite)
+BulletEntity::BulletEntity(LTexture* sprite)
 {
 	isActive = false;
 	mSprite = sprite;
 }
 
-void Bullet::active(int x, int y, enum Facing dir)
+SDL_Rect BulletEntity::getPosition()
+{
+	return mCollider;
+}
+
+void BulletEntity::active(int x, int y, enum Facing dir, enum Owner owner)
 {
 	isActive = true;
 
@@ -17,14 +22,16 @@ void Bullet::active(int x, int y, enum Facing dir)
 
 	switch (dir)
 	{
-	case FACING_DOWN: mVelY = 8; mSpriteAngle = 180; break;
-	case FACING_LEFT: mVelX = -8; mSpriteAngle = 270; break;
-	case FACING_UP: mVelY = -8; mSpriteAngle = 0; break;
-	case FACING_RIGHT: mVelX = 8; mSpriteAngle = 90; break;
+	case FACING_DOWN: mVelX = 0; mVelY = 8; mSpriteAngle = 180; break;
+	case FACING_LEFT: mVelX = -8; mVelY = 0; mSpriteAngle = 270; break;
+	case FACING_UP: mVelX = 0; mVelY = -8; mSpriteAngle = 0; break;
+	case FACING_RIGHT: mVelX = 8; mVelY = 0; mSpriteAngle = 90; break;
 	}
+
+	mOwner = owner;
 }
 
-void Bullet::update()
+void BulletEntity::update()
 {
 	//Bullet Animation
 	if (mAnimFrame < 3) mAnimFrame++;
@@ -34,15 +41,76 @@ void Bullet::update()
 	mCollider.x += mVelX;
 	mCollider.y += mVelY;
 
-	//Check if collision
-	if (mCollider.x < STAGE_X_BEGIN || mCollider.y < STAGE_Y_BEGIN || mCollider.y > STAGE_Y_END || mCollider.y > STAGE_Y_END)
-	{
-		isActive = false;
-	}
-	
-	if(isActive == true)
+	if (isActive == true)
 	{
 		printf("%d, %d, %s\n", mCollider.x, mCollider.y, mSprite->getFilePath().c_str());
 		mSprite->render(mCollider.x, mCollider.y, &clip, mSpriteAngle);
 	}
+
+	//Check if collision
+	if ((mVelX < 0 && mCollider.x <= STAGE_X_BEGIN + 8)|| (mVelY < 0 && mCollider.y < STAGE_Y_BEGIN) || (mVelX > 0 && mCollider.x > STAGE_X_END + 8) || (mVelY > 0 && mCollider.y > STAGE_Y_END))
+	{
+		isActive = false;
+	}
+}
+
+BulletGroup::BulletGroup(int bulletSlot)
+{
+	pBulletSlot = bulletSlot;
+}
+
+std::vector<BulletEntity> BulletGroup::getBulletVector()
+{
+	return vBullet;
+}
+
+bool BulletGroup::checkCollisionToAll(SDL_Rect otherCollision)
+{
+	for (int i = 0; i < pBulletSlot; i++)
+	{
+		if (Entity::checkCollision(vBullet[i].getPosition(),otherCollision) == true)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void BulletGroup::active(SDL_Rect playerPosition, enum Facing dir, enum Owner owner)
+{
+	if (dir == FACING_UP || dir == FACING_DOWN)
+	{
+		vBullet[updateBulletFreeIndex()].active(playerPosition.x + 12, playerPosition.y, dir, owner);
+	}
+	else
+	{
+		vBullet[updateBulletFreeIndex()].active(playerPosition.x, playerPosition.y, dir, owner);
+	}
+}
+
+void BulletGroup::update()
+{
+	for (int i = 0; i < pBulletSlot; i++)
+	{
+		vBullet[i].update();
+	}
+}
+
+int BulletGroup::updateBulletFreeIndex()
+{
+	int i = 0;
+	for (BulletEntity bullet : vBullet)
+	{
+		if (bullet.getActive() == false)
+		{
+			return i;
+		}
+		else
+		{
+			i++;
+		}
+	}
+
+	if (i >= pBulletSlot) return 0;
 }
