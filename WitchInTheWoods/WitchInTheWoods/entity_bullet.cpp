@@ -1,4 +1,5 @@
 #include "entity_bullet.h"
+#include <cmath>
 
 BulletEntity::BulletEntity(LTexture* sprite)
 {
@@ -17,21 +18,33 @@ void BulletEntity::active(int x, int y, enum Facing dir, enum Owner owner)
 
 	mCollider.x = x;
 	mCollider.y = y;
-	mCollider.w = 8;
-	mCollider.h = 32;
+	mSpriteFacing = dir;
+
+	if (dir == FACING_DOWN || dir == FACING_UP)
+	{
+		mCollider.w = 8;
+		mCollider.h = 32;
+	}
+	else if (dir == FACING_LEFT || dir == FACING_RIGHT)
+	{
+		mCollider.w = 32;
+		mCollider.h = 8;
+		mCollider.y += 12;
+	}
+	
 
 	switch (dir)
 	{
-	case FACING_DOWN: mVelX = 0; mVelY = 8; mSpriteAngle = 180; break;
-	case FACING_LEFT: mVelX = -8; mVelY = 0; mSpriteAngle = 270; break;
-	case FACING_UP: mVelX = 0; mVelY = -8; mSpriteAngle = 0; break;
-	case FACING_RIGHT: mVelX = 8; mVelY = 0; mSpriteAngle = 90; break;
+	case FACING_DOWN: mVelX = 0; mVelY = DEFAULT_VEL; mSpriteAngle = 180; break;
+	case FACING_LEFT: mVelX = -DEFAULT_VEL; mVelY = 0; mSpriteAngle = 270; break;
+	case FACING_UP: mVelX = 0; mVelY = -DEFAULT_VEL; mSpriteAngle = 0; break;
+	case FACING_RIGHT: mVelX = DEFAULT_VEL; mVelY = 0; mSpriteAngle = 90; break;
 	}
 
 	mOwner = owner;
 }
 
-void BulletEntity::update()
+void BulletEntity::update(StageLoader &stages)
 {
 	//Bullet Animation
 	if (mAnimFrame < 3) mAnimFrame++;
@@ -40,17 +53,57 @@ void BulletEntity::update()
 	//Move Bullet
 	mCollider.x += mVelX;
 	mCollider.y += mVelY;
+	
 
 	if (isActive == true)
 	{
-		printf("%d, %d, %s\n", mCollider.x, mCollider.y, mSprite->getFilePath().c_str());
-		mSprite->render(mCollider.x, mCollider.y, &clip, mSpriteAngle);
+		//printf("%d, %d, %s\n", mCollider.x, mCollider.y, mSprite->getFilePath().c_str());
+		if(mSpriteFacing == FACING_LEFT || mSpriteFacing == FACING_RIGHT)
+			mSprite->render(mCollider.x, mCollider.y - 12, &clip, mSpriteAngle);
+		else
+			mSprite->render(mCollider.x, mCollider.y, &clip, mSpriteAngle);
 	}
 
 	//Check if collision
 	if ((mVelX < 0 && mCollider.x <= STAGE_X_BEGIN + 8)|| (mVelY < 0 && mCollider.y < STAGE_Y_BEGIN) || (mVelX > 0 && mCollider.x > STAGE_X_END + 8) || (mVelY > 0 && mCollider.y > STAGE_Y_END))
 	{
 		isActive = false;
+	}
+
+	checkStageCollision(stages.vTile);
+}
+
+void BulletEntity::checkStageCollision(std::vector<StageEntity> &vTile)
+{
+	float gx = (mCollider.x - STAGE_X_BEGIN) / 32.0;
+	float gy = (mCollider.y - STAGE_Y_BEGIN) / 32.0;
+
+
+	int gCheck[4] = {
+		((std::floor(gy) * 14) + std::floor(gx)),
+		((std::floor(gy) * 14) + std::ceil(gx)),
+		((std::ceil(gy) * 14) + std::floor(gx)),
+		((std::ceil(gy) * 14) + std::ceil(gx))
+	};
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (gCheck[i] >= 0 && gCheck[i] < 14 * 18)
+		{
+			SDL_Rect rectCheck = vTile.at(gCheck[i]).getPosition();
+
+			//SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0x00);
+			//SDL_RenderFillRect(gRenderer, &rectCheck);
+
+			if (vTile.at(gCheck[i]).getPassable() == false && Entity::checkCollision(rectCheck, mCollider) == true)
+			{
+				if (isActive == true && vTile.at(gCheck[i]).getDestructible() == true)
+				{
+					vTile.at(gCheck[i]).damage(mSpriteFacing);
+				}
+				isActive = false;
+			}
+		}
 	}
 }
 
@@ -89,11 +142,11 @@ void BulletGroup::active(SDL_Rect playerPosition, enum Facing dir, enum Owner ow
 	}
 }
 
-void BulletGroup::update()
+void BulletGroup::update(StageLoader &stages)
 {
 	for (int i = 0; i < pBulletSlot; i++)
 	{
-		vBullet[i].update();
+		vBullet[i].update(stages);
 	}
 }
 

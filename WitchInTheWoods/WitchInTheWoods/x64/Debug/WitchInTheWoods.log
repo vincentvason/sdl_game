@@ -1,8 +1,2 @@
-﻿  entity_player.cpp
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(43,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(48,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(52,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(57,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(91,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(92,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+﻿  entity_stage.cpp
   WitchInTheWoods.vcxproj -> C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\x64\Debug\WitchInTheWoods.exe

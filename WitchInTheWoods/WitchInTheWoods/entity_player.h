@@ -2,12 +2,13 @@
 #include "load.h"
 #include "entity.h"
 #include "entity_bullet.h"
+#include "entity_stage.h"
 
 class PlayerEntity : public Entity
 {
 public:
 	PlayerEntity(LTexture* sprite, int x = 0, int y = 0);
-	void update();
+	void update(StageLoader stages);
 
 	void move(enum Facing facing);
 	void shoot();
@@ -32,6 +33,6 @@ private:
 	const int ATTACK_SPRITE = 3;
 
 	void checkBorderCollision();
-	void checkStageCollision();
+	void checkStageCollision(std::vector<StageEntity> vTile);
 	
 };

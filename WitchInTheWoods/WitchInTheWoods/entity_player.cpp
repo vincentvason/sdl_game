@@ -1,4 +1,5 @@
 #include "entity_player.h"
+#include <cmath>
 
 PlayerEntity::PlayerEntity(LTexture* sprite, int x, int y)
 {
@@ -21,10 +22,11 @@ Entity::Facing PlayerEntity::getFacing()
 	return mAnimFacing;
 }
 
-void PlayerEntity::update()
+void PlayerEntity::update(StageLoader stages)
 {
 	checkBorderCollision();
-	printf("%d(%f), %d(%f), %s\n", mCollider.x, (mCollider.x - STAGE_X_BEGIN)/ 32.0, mCollider.y, (mCollider.y - STAGE_Y_BEGIN) / 32.0, mSprite->getFilePath().c_str());
+	checkStageCollision(stages.vTile);
+	//printf("%d(%f), %d(%f), %s\n", mCollider.x, (mCollider.x - STAGE_X_BEGIN)/ 32.0, mCollider.y, (mCollider.y - STAGE_Y_BEGIN) / 32.0, mSprite->getFilePath().c_str());
 
 	SDL_Rect clip = { 32 * (mAnimFacing + (int)mAnimWalking), 0, 32, 32 };
 	mSprite->render(mCollider.x, mCollider.y, &clip);
@@ -86,8 +88,34 @@ void PlayerEntity::checkBorderCollision()
 	else mCollider.y += mVelY;
 }
 
-void PlayerEntity::checkStageCollision()
+void PlayerEntity::checkStageCollision(std::vector<StageEntity> vTile)
 {
-	float gridX = (mCollider.x / 32.0) - STAGE_X_BEGIN;
-	float gridY = (mCollider.y / 32.0) - STAGE_Y_BEGIN;
+	float gx = (mCollider.x - STAGE_X_BEGIN) / 32.0;
+	float gy = (mCollider.y - STAGE_Y_BEGIN) / 32.0;
+
+	
+	int gCheck[4] = {
+		((std::floor(gy) * 14) + std::floor(gx)),
+		((std::floor(gy) * 14) + std::ceil(gx)),
+		((std::ceil(gy) * 14) + std::floor(gx)),
+		((std::ceil(gy) * 14) + std::ceil(gx))
+	};
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (gCheck[i] >= 0 && gCheck[i] < 14 * 18)
+		{
+			SDL_Rect rectCheck = vTile[gCheck[i]].getPosition();
+			
+			//SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0x00);
+			//SDL_RenderFillRect(gRenderer, &rectCheck);
+
+			if (vTile[gCheck[i]].getPassable() == false && Entity::checkCollision(rectCheck, mCollider) == true)
+			{
+				mCollider.x -= mVelX;
+				mCollider.y -= mVelY;
+			}
+		}
+	}
+
 }

@@ -81,8 +81,8 @@ void InGameScene::update(Game& game)
 
 
 	//Rendering
-	p1.update();
-	bullets.update();
+	p1.update(stages);
+	bullets.update(stages);
 	stages.update();
 }
 
