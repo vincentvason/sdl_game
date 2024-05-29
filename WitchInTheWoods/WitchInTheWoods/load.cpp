@@ -12,6 +12,9 @@ LTexture gIconTexture;
 LTexture gMonster1Texture;
 LTexture gWitch1Texture;
 LTexture gBulletTexture;
+LTexture gEdificeTexture;
+LTexture gWallTexture;
+LTexture gTreeTexture;
 
 //Text list
 LTexture gTextTexture;
@@ -115,6 +118,27 @@ bool loadMedia()
 	if (!gMonster1Texture.loadFromFile("img/monster1.png"))
 	{
 		printf("Failed to load \"img/monster1.png\"!\n");
+		success = false;
+	}
+
+	//Load edifice texture
+	if (!gEdificeTexture.loadFromFile("img/edifice.png"))
+	{
+		printf("Failed to load \"img/edifice.png\"!\n");
+		success = false;
+	}
+
+	//Load wall texture
+	if (!gWallTexture.loadFromFile("img/wall.png"))
+	{
+		printf("Failed to load \"img/wall.png\"!\n");
+		success = false;
+	}
+
+	//Load wall texture
+	if (!gTreeTexture.loadFromFile("img/tree.png"))
+	{
+		printf("Failed to load \"img/tree.png\"!\n");
 		success = false;
 	}
 

@@ -1,25 +1,8 @@
-﻿  entity.cpp
-  entity_bullet.cpp
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(38,22): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(38,22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-  entity_enemy.cpp
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(65,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(70,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(74,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(79,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-  entity_player.cpp
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(50,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(55,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(59,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(64,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-  game.cpp
-  game_ingame.cpp
-  game_menu.cpp
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_menu.cpp(25,43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_menu.cpp(28,43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_menu.cpp(31,100): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_menu.cpp(31,43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-  main.cpp
-  Generating Code...
-C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(116): warning C4715: 'BulletGroup::updateBulletFreeIndex': not all control paths return a value
+﻿  entity_player.cpp
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(43,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(48,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(52,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(57,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(91,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(92,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   WitchInTheWoods.vcxproj -> C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\x64\Debug\WitchInTheWoods.exe

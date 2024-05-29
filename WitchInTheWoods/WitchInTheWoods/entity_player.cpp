@@ -23,15 +23,8 @@ Entity::Facing PlayerEntity::getFacing()
 
 void PlayerEntity::update()
 {
-	if (mCollider.x + mVelX < STAGE_X_BEGIN) mCollider.x = STAGE_X_BEGIN;
-	else if (mCollider.x + mVelX > STAGE_X_END) mCollider.x = STAGE_X_END;
-	else mCollider.x += mVelX;
-
-	if (mCollider.y + mVelY < STAGE_Y_BEGIN) mCollider.y = STAGE_Y_BEGIN;
-	else if (mCollider.y + mVelY > STAGE_Y_END) mCollider.y = STAGE_Y_END;
-	else mCollider.y += mVelY;
-
-	printf("%d, %d, %s\n", mCollider.x, mCollider.y, mSprite->getFilePath().c_str());
+	checkBorderCollision();
+	printf("%d(%f), %d(%f), %s\n", mCollider.x, (mCollider.x - STAGE_X_BEGIN)/ 32.0, mCollider.y, (mCollider.y - STAGE_Y_BEGIN) / 32.0, mSprite->getFilePath().c_str());
 
 	SDL_Rect clip = { 32 * (mAnimFacing + (int)mAnimWalking), 0, 32, 32 };
 	mSprite->render(mCollider.x, mCollider.y, &clip);
@@ -80,4 +73,21 @@ void PlayerEntity::move(enum Facing facing)
 void PlayerEntity::shoot()
 {
 	mAnimWalking = 3;	
+}
+
+void PlayerEntity::checkBorderCollision()
+{
+	if (mCollider.x + mVelX < STAGE_X_BEGIN) mCollider.x = STAGE_X_BEGIN;
+	else if (mCollider.x + mVelX > STAGE_X_END) mCollider.x = STAGE_X_END;
+	else mCollider.x += mVelX;
+
+	if (mCollider.y + mVelY < STAGE_Y_BEGIN) mCollider.y = STAGE_Y_BEGIN;
+	else if (mCollider.y + mVelY > STAGE_Y_END) mCollider.y = STAGE_Y_END;
+	else mCollider.y += mVelY;
+}
+
+void PlayerEntity::checkStageCollision()
+{
+	float gridX = (mCollider.x / 32.0) - STAGE_X_BEGIN;
+	float gridY = (mCollider.y / 32.0) - STAGE_Y_BEGIN;
 }

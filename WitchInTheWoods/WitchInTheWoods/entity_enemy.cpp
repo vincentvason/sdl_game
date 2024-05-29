@@ -41,12 +41,11 @@ void EnemyEntity::update()
 	else if (mCollider.y + mVelY > STAGE_Y_END) mCollider.y = STAGE_Y_END;
 	else mCollider.y += mVelY;
 
-	printf("%d, %d, %s\n", mCollider.x, mCollider.y, mSprite->getFilePath().c_str());
-
 	SDL_Rect clip = { 32 * (mAnimFacing + (int)mAnimWalking), 0, 32, 32 };
 	
 	if (isActive == true)
 	{
+		printf("%d, %d, %s\n", mCollider.x, mCollider.y, mSprite->getFilePath().c_str());
 		mSprite->render(mCollider.x, mCollider.y, &clip);
 	}
 	
@@ -55,8 +54,9 @@ void EnemyEntity::update()
 	mVelY = 0;
 }
 
-void EnemyEntity::move(enum Facing facing)
+void EnemyEntity::move(SDL_Rect playerPosition)
 {
+	enum Facing facing = FACING_DOWN;
 	switch (facing)
 	{
 	case FACING_UP:

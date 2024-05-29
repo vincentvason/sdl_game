@@ -66,14 +66,24 @@ void InGameScene::update(Game& game)
 	SDL_RenderDrawRect(gRenderer, &stage);
 	SDL_RenderFillRect(gRenderer, &stage);
 
+	//Load Stage (if it's not loaded)
+	if (isStageLoaded == false)
+	{
+		stages.getStageFromFile(1);
+		isStageLoaded = true;
+	}
+
 	//Check Collision
 	if (bullets.checkCollisionToAll(en.getPosition()) == true)
 		en.setActive(false);
 
-	//Render Player
-	en.update();
+	//Enemy Move
+
+
+	//Rendering
 	p1.update();
 	bullets.update();
+	stages.update();
 }
 
 void InGameScene::updatePlayerHUD(Game& game)

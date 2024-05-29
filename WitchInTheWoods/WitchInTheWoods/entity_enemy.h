@@ -9,7 +9,7 @@ public:
 	EnemyEntity(LTexture* sprite, int x = 0, int y = 0);
 	void update();
 
-	void move(enum Facing facing);
+	void move(SDL_Rect playerPosition);
 	void shoot();
 	SDL_Rect getPosition();
 	Entity::Facing getFacing();

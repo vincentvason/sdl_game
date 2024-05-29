@@ -31,5 +31,7 @@ private:
 	const int WALKING_FRAME = 3;
 	const int ATTACK_SPRITE = 3;
 
+	void checkBorderCollision();
+	void checkStageCollision();
 	
 };

@@ -4,6 +4,7 @@
 #include "entity_bullet.h"
 #include "entity_player.h"
 #include "entity_enemy.h"
+#include "entity_stage.h"
 
 
 class Game;
@@ -61,8 +62,11 @@ private:
 
 	int pScore[2] = { 0 }, pLife[2] = { 3 };
 	int pStage = 1;
+	bool isStageLoaded = false;
 
 	PlayerEntity p1 = PlayerEntity(&gWitch1Texture);
 	EnemyEntity en = EnemyEntity(&gMonster1Texture, 100, 100);
+	StageEntity st = StageEntity(&gEdificeTexture, 100, 100);
 	BulletGroup bullets;
+	StageLoader stages;
 };

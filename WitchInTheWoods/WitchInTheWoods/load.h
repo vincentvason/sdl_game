@@ -18,6 +18,9 @@ extern LTexture gIconTexture;
 extern LTexture gWitch1Texture;
 extern LTexture gMonster1Texture;
 extern LTexture gBulletTexture;
+extern LTexture gEdificeTexture;
+extern LTexture gWallTexture;
+extern LTexture gTreeTexture;
 
 //Text Bank
 extern LTexture gTextTexture;
