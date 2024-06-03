@@ -4,8 +4,9 @@
 #include "entity_bullet.h"
 #include "entity_player.h"
 #include "entity_enemy.h"
-#include "entity_stage.h"
-
+#include "entity_tile.h"
+#include "stage.h"
+#include "profile.h"
 
 class Game;
 class GameScene;
@@ -21,21 +22,12 @@ public:
 	Game();
 	virtual void handleEvent(SDL_Event* e);
 	virtual void update();
-	void insertCredit();
-	bool usedCredit();
-	int getHighScore();
-	void updateCreditHUD();
-	bool getPlayerIn(int player);
-	void setPlayerIn(int player, bool val);
 
 private:
 	GameScene* mScene;
-	int mCredit = 0;
-	int mHighScore = 10000;
-	bool pIn[2] = { false };
 };
 
-class GameScene
+class GameScene : public Game
 {
 public:
 	virtual ~GameScene();
@@ -57,16 +49,11 @@ public:
 	void update(Game& game);
 
 private:
-	void updatePlayerHUD(Game& game);
-	void updateBottomHUD(Game& game);
-
-	int pScore[2] = { 0 }, pLife[2] = { 3 };
-	int pStage = 1;
 	bool isStageLoaded = false;
 
-	PlayerEntity p1 = PlayerEntity(&gWitch1Texture);
-	EnemyEntity en = EnemyEntity(&gMonster1Texture, 100, 100);
-	StageEntity st = StageEntity(&gEdificeTexture, 100, 100);
+	PlayerGroup players;
+	TileGroup tiles;
 	BulletGroup bullets;
-	StageLoader stages;
+	Stage stage;
+	EnemySpawner enemies;
 };

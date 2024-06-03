@@ -24,45 +24,6 @@ void Game::update()
 	mScene->update(*this);
 }
 
-void Game::insertCredit()
-{
-	if (mCredit < 9) mCredit++;
-}
-
-bool Game::usedCredit()
-{
-	if (mCredit > 0)
-	{
-		mCredit--;
-		return true;
-	}
-	
-	return false;
-}
-
-void Game::updateCreditHUD()
-{
-	char string[11];
-	sprintf_s(string, 11, "CREDIT(S)%d", mCredit);
-	gTextTexture.loadFromRenderedText(string, gTextColor_White);
-	gTextTexture.render(320, 624);
-}
-
-int Game::getHighScore()
-{
-	return mHighScore;
-}
-
-bool Game::getPlayerIn(int player)
-{
-	return pIn[player];
-}
-
-void Game::setPlayerIn(int player, bool val)
-{
-	pIn[player] = val;
-}
-
 GameScene::~GameScene()
 {
 

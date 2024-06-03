@@ -14,21 +14,16 @@ public:
 	};
 
 	enum Facing {
-		FACING_DOWN = 0,
-		FACING_LEFT = 4,
-		FACING_UP = 8,
-		FACING_RIGHT = 12,
-		DYING = 16
+		FACING_DOWN,
+		FACING_LEFT,
+		FACING_UP,
+		FACING_RIGHT,
+		DYING,
+		IDLE
 	};
 
-	enum Tag {
-		NONE,
-		ENEMY_GROUND,
-		ENEMY_FLYING,
-		ENEMY_BULLET,
-		PLAYER,
-		PLAYER_BULLET
-	};
+	int gridX(int grid) { return STAGE_X_BEGIN + (grid * 32); };
+	int gridY(int grid) { return STAGE_Y_BEGIN + (grid * 32); };
 
 	bool checkCollision(SDL_Rect a, SDL_Rect b);
 

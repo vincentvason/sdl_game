@@ -45,7 +45,13 @@
     <ClCompile Include="entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="entity_stage.cpp">
+    <ClCompile Include="entity_tile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="profile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,7 +77,13 @@
     <ClInclude Include="entity_enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="entity_stage.h">
+    <ClInclude Include="entity_tile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="profile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

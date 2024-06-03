@@ -23,23 +23,27 @@
     <ClCompile Include="entity_bullet.cpp" />
     <ClCompile Include="entity_enemy.cpp" />
     <ClCompile Include="entity_player.cpp" />
-    <ClCompile Include="entity_stage.cpp" />
+    <ClCompile Include="entity_tile.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="game_ingame.cpp" />
     <ClCompile Include="game_menu.cpp" />
     <ClCompile Include="load.cpp" />
     <ClCompile Include="LTexture.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="profile.cpp" />
+    <ClCompile Include="stage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h" />
     <ClInclude Include="entity_bullet.h" />
     <ClInclude Include="entity_enemy.h" />
     <ClInclude Include="entity_player.h" />
-    <ClInclude Include="entity_stage.h" />
+    <ClInclude Include="entity_tile.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="load.h" />
     <ClInclude Include="LTexture.h" />
+    <ClInclude Include="profile.h" />
+    <ClInclude Include="stage.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -12,7 +12,12 @@ SDL_Rect BulletEntity::getPosition()
 	return mCollider;
 }
 
-void BulletEntity::active(int x, int y, enum Facing dir, enum Owner owner)
+void BulletEntity::setActive(bool active)
+{
+	isActive = active;
+}
+
+void BulletEntity::init(int x, int y, enum Facing dir, enum Owner owner)
 {
 	isActive = true;
 
@@ -35,16 +40,32 @@ void BulletEntity::active(int x, int y, enum Facing dir, enum Owner owner)
 
 	switch (dir)
 	{
-	case FACING_DOWN: mVelX = 0; mVelY = DEFAULT_VEL; mSpriteAngle = 180; break;
-	case FACING_LEFT: mVelX = -DEFAULT_VEL; mVelY = 0; mSpriteAngle = 270; break;
-	case FACING_UP: mVelX = 0; mVelY = -DEFAULT_VEL; mSpriteAngle = 0; break;
-	case FACING_RIGHT: mVelX = DEFAULT_VEL; mVelY = 0; mSpriteAngle = 90; break;
+	case FACING_DOWN: 
+		mVelX = 0; 
+		mVelY = DEFAULT_VEL; 
+		mSpriteAngle = 180; 
+		break;
+	case FACING_LEFT: 
+		mVelX = -DEFAULT_VEL; 
+		mVelY = 0; 
+		mSpriteAngle = 270; 
+		break;
+	case FACING_UP: 
+		mVelX = 0; 
+		mVelY = -DEFAULT_VEL; 
+		mSpriteAngle = 0; 
+		break;
+	case FACING_RIGHT: 
+		mVelX = DEFAULT_VEL; 
+		mVelY = 0; 
+		mSpriteAngle = 90; 
+		break;
 	}
 
 	mOwner = owner;
 }
 
-void BulletEntity::update(StageLoader &stages)
+void BulletEntity::update(TileGroup &tileGroup)
 {
 	//Bullet Animation
 	if (mAnimFrame < 3) mAnimFrame++;
@@ -53,7 +74,6 @@ void BulletEntity::update(StageLoader &stages)
 	//Move Bullet
 	mCollider.x += mVelX;
 	mCollider.y += mVelY;
-	
 
 	if (isActive == true)
 	{
@@ -70,10 +90,18 @@ void BulletEntity::update(StageLoader &stages)
 		isActive = false;
 	}
 
-	checkStageCollision(stages.vTile);
+	if (mLifeSpan > DEFAULT_LIFESPAN)
+		isActive = false;
+
+	if (isActive == true)
+		mLifeSpan++;
+	else
+		mLifeSpan = 0;
+	
+	checkStageCollision(tileGroup.vTile);
 }
 
-void BulletEntity::checkStageCollision(std::vector<StageEntity> &vTile)
+void BulletEntity::checkStageCollision(std::vector<TileEntity> &vTile)
 {
 	float gx = (mCollider.x - STAGE_X_BEGIN) / 32.0;
 	float gy = (mCollider.y - STAGE_Y_BEGIN) / 32.0;
@@ -117,36 +145,23 @@ std::vector<BulletEntity> BulletGroup::getBulletVector()
 	return vBullet;
 }
 
-bool BulletGroup::checkCollisionToAll(SDL_Rect otherCollision)
-{
-	for (int i = 0; i < pBulletSlot; i++)
-	{
-		if (Entity::checkCollision(vBullet[i].getPosition(),otherCollision) == true)
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
-void BulletGroup::active(SDL_Rect playerPosition, enum Facing dir, enum Owner owner)
+void BulletGroup::init(SDL_Rect playerPosition, enum Facing dir, enum Owner owner)
 {
 	if (dir == FACING_UP || dir == FACING_DOWN)
 	{
-		vBullet[updateBulletFreeIndex()].active(playerPosition.x + 12, playerPosition.y, dir, owner);
+		vBullet[updateBulletFreeIndex()].init(playerPosition.x + 12, playerPosition.y, dir, owner);
 	}
 	else
 	{
-		vBullet[updateBulletFreeIndex()].active(playerPosition.x, playerPosition.y, dir, owner);
+		vBullet[updateBulletFreeIndex()].init(playerPosition.x, playerPosition.y, dir, owner);
 	}
 }
 
-void BulletGroup::update(StageLoader &stages)
+void BulletGroup::update(TileGroup& tileGroup)
 {
 	for (int i = 0; i < pBulletSlot; i++)
 	{
-		vBullet[i].update(stages);
+		vBullet[i].update(tileGroup);
 	}
 }
 
@@ -166,4 +181,25 @@ int BulletGroup::updateBulletFreeIndex()
 	}
 
 	if (i >= pBulletSlot) return 0;
+}
+
+bool BulletGroup::checkCollisionToEnemies(EnemySpawner& enemies)
+{
+	for (int i = 0; i < pBulletSlot; i++)
+	{
+		if (vBullet[i].getActive() == true)
+		{
+			for (int j = 0; j < enemies.pEnemySlot; j++)
+			{
+				if (enemies.vEnemy[j].getActive() == true && Entity::checkCollision(vBullet[i].getPosition(), enemies.vEnemy[j].getPosition()) == true)
+				{
+					enemies.vEnemy[j].setActive(false);
+					vBullet[i].setActive(false);
+					profile.addScore(100);
+				}
+			}
+		}
+	}
+
+	return true;
 }

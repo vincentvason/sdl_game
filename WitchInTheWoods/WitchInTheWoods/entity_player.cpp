@@ -3,7 +3,6 @@
 
 PlayerEntity::PlayerEntity(LTexture* sprite, int x, int y)
 {
-	isActive = true;
 	mSprite = sprite;
 
 	mCollider.x = x;
@@ -17,18 +16,44 @@ SDL_Rect PlayerEntity::getPosition()
 	return mCollider;
 }
 
+void PlayerEntity::setPosition(int x, int y)
+{
+	mCollider.x = x;
+	mCollider.y = y;
+}
+
 Entity::Facing PlayerEntity::getFacing()
 {
 	return mAnimFacing;
 }
 
-void PlayerEntity::update(StageLoader stages)
+void PlayerEntity::update(TileGroup tileGroup)
 {
 	checkBorderCollision();
-	checkStageCollision(stages.vTile);
+	checkStageCollision(tileGroup.vTile);
 	//printf("%d(%f), %d(%f), %s\n", mCollider.x, (mCollider.x - STAGE_X_BEGIN)/ 32.0, mCollider.y, (mCollider.y - STAGE_Y_BEGIN) / 32.0, mSprite->getFilePath().c_str());
 
-	SDL_Rect clip = { 32 * (mAnimFacing + (int)mAnimWalking), 0, 32, 32 };
+	int anim;
+	switch (mAnimFacing)
+	{
+	case FACING_DOWN:
+		anim = 0;
+		break;
+	case FACING_LEFT:
+		anim = 4;
+		break;
+	case FACING_UP:
+		anim = 8;
+		break;
+	case FACING_RIGHT:
+		anim = 12;
+		break;
+	case DYING:
+		anim = 16;
+		break;
+	}
+
+	SDL_Rect clip = { 32 * (anim + (int)mAnimWalking), 0, 32, 32 };
 	mSprite->render(mCollider.x, mCollider.y, &clip);
 
 	mVelX = 0;
@@ -88,7 +113,7 @@ void PlayerEntity::checkBorderCollision()
 	else mCollider.y += mVelY;
 }
 
-void PlayerEntity::checkStageCollision(std::vector<StageEntity> vTile)
+void PlayerEntity::checkStageCollision(std::vector<TileEntity> vTile)
 {
 	float gx = (mCollider.x - STAGE_X_BEGIN) / 32.0;
 	float gy = (mCollider.y - STAGE_Y_BEGIN) / 32.0;
@@ -117,5 +142,4 @@ void PlayerEntity::checkStageCollision(std::vector<StageEntity> vTile)
 			}
 		}
 	}
-
 }

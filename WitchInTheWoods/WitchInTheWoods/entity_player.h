@@ -2,16 +2,19 @@
 #include "load.h"
 #include "entity.h"
 #include "entity_bullet.h"
-#include "entity_stage.h"
+#include "entity_tile.h"
 
 class PlayerEntity : public Entity
 {
 public:
 	PlayerEntity(LTexture* sprite, int x = 0, int y = 0);
-	void update(StageLoader stages);
+	void update(TileGroup tileGroup);
 
 	void move(enum Facing facing);
 	void shoot();
+	void setPosition(int x = 0, int y = 0);
+	bool getActive() { return isActive; };
+	void setActive(bool active) { isActive = active; };
 	SDL_Rect getPosition();
 	Entity::Facing getFacing();
 
@@ -26,13 +29,20 @@ protected:
 	LTexture* mSprite;
 
 private:
-	const float DEFAULT_VEL = 4;
+	const float DEFAULT_VEL = 6;
 	const float DEFAULT_STEP_SPEED = 0.5;
 
 	const int WALKING_FRAME = 3;
 	const int ATTACK_SPRITE = 3;
 
 	void checkBorderCollision();
-	void checkStageCollision(std::vector<StageEntity> vTile);
+	void checkStageCollision(std::vector<TileEntity> vTile);
 	
+};
+
+class PlayerGroup : public Entity
+{
+public:
+	PlayerEntity p1 = PlayerEntity(&gWitch1Texture);
+	PlayerEntity p2 = PlayerEntity(&gWitch1Texture);
 };

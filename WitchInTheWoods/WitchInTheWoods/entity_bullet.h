@@ -1,6 +1,8 @@
 #pragma once
 #include "entity.h"
-#include "entity_stage.h"
+#include "entity_tile.h"
+#include "entity_enemy.h"
+#include "profile.h"
 #include <vector>
 
 class BulletEntity : public Entity
@@ -9,15 +11,17 @@ public:
 	BulletEntity() {};
 	BulletEntity(LTexture* sprite);
 	SDL_Rect getPosition();
-	void active(int x = 0, int y = 0, enum Facing dir = FACING_DOWN, enum Owner owner = FREE);
-	void update(StageLoader &stages);
+	void init(int x = 0, int y = 0, enum Facing dir = FACING_DOWN, enum Owner owner = FREE);
+	void update(TileGroup& tileGroup);
 	bool getActive() { return isActive; };
+	void setActive(bool active);
 
 protected:
 	bool isActive = false;
 	int mVelX = 0, mVelY = 0;
 	enum Owner mOwner = FREE;
 
+	int mLifeSpan = 0;
 	float mAnimFrame = 0;
 	int mSpriteAngle = 0;
 	enum Facing mSpriteFacing = FACING_DOWN;
@@ -26,8 +30,9 @@ protected:
 	LTexture* mSprite = nullptr;
 
 private:
-	const float DEFAULT_VEL = 16;
-	void checkStageCollision(std::vector<StageEntity> &vTile);
+	const float DEFAULT_VEL = 8;
+	const float DEFAULT_LIFESPAN = 4 * 32 / DEFAULT_VEL;
+	void checkStageCollision(std::vector<TileEntity> &vTile);
 };
 
 class BulletGroup : public Entity
@@ -36,9 +41,9 @@ public:
 	BulletGroup(int bulletSlot = 4);
 	std::vector<BulletEntity> getBulletVector();
 
-	void active(SDL_Rect playerPosition, enum Facing dir = FACING_DOWN, enum Owner owner = FREE);
-	void update(StageLoader &stages);
-	bool checkCollisionToAll(SDL_Rect otherCollider);
+	void init(SDL_Rect playerPosition, enum Facing dir = FACING_DOWN, enum Owner owner = FREE);
+	void update(TileGroup& tileGroup);
+	bool checkCollisionToEnemies(EnemySpawner& enemies);
 
 private:
 	int pBulletSlot = 4;

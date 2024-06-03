@@ -1,2 +1,63 @@
-﻿  entity_stage.cpp
+﻿  entity_bullet.cpp
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(45,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(49,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(55,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(59,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(72,22): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(72,22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(106,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(107,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(111,26): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(111,26): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(112,26): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(112,26): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(113,25): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(113,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(114,25): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(114,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  entity_enemy.cpp
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(105,12): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(118,12): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(132,12): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(145,12): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(182,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(183,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(187,26): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(187,26): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(188,26): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(188,26): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(189,25): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(189,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(190,25): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_enemy.cpp(190,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  entity_player.cpp
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(70,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(75,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(79,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(84,11): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(118,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(119,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(123,26): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(123,26): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(124,26): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(124,26): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(125,25): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(125,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(126,25): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_player.cpp(126,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  game.cpp
+  game_ingame.cpp
+  game_menu.cpp
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_menu.cpp(35,43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_menu.cpp(38,43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_menu.cpp(41,100): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\game_menu.cpp(41,43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  main.cpp
+  stage.cpp
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\stage.cpp(113,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\stage.cpp(175,25): warning C4305: 'initializing': truncation from 'int' to 'float'
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\stage.cpp(243,32): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\stage.cpp(245,28): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\WitchInTheWoods\entity_bullet.cpp(184): warning C4715: 'BulletGroup::updateBulletFreeIndex': not all control paths return a value
   WitchInTheWoods.vcxproj -> C:\Users\ASUS\Documents\GitHub\sdl_game\WitchInTheWoods\x64\Debug\WitchInTheWoods.exe

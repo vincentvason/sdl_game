@@ -8,9 +8,19 @@ GameScene* MenuScene::handleEvent(Game& game, SDL_Event* e)
 		//Adjust the velocity
 		switch (e->key.keysym.sym)
 		{
-		case SDLK_SPACE: game.insertCredit(); break;
-		case SDLK_LSHIFT: if (game.usedCredit()) { game.setPlayerIn(0, true); return &ingame; }
-		case SDLK_RSHIFT: if (game.usedCredit()) { game.setPlayerIn(1, true); return &ingame; }
+		case SDLK_SPACE: profile.insertCredit(); break;
+		case SDLK_LSHIFT: 
+			if (profile.usedCredit()) 
+			{ 
+				profile.setPlayerIn(0, true);
+				return &ingame; 
+			}
+		case SDLK_RSHIFT:
+			if (profile.usedCredit())
+			{
+				profile.setPlayerIn(1, true);
+				return &ingame;
+			}
 		}
 	}
 
@@ -23,7 +33,7 @@ void MenuScene::update(Game& game)
 	char string[11];
 	gTextTexture.loadFromRenderedText("HIGH SCORE", gTextColor_White);
 	gTextTexture.render((SCREEN_WIDTH * 0.5) - (gTextTexture.getWidth() * 0.5), 0);
-	sprintf_s(string, 11, "%10d", game.getHighScore());
+	sprintf_s(string, 11, "%10d", profile.getHighScore());
 	gTextTexture.loadFromRenderedText(string, gTextColor_White);
 	gTextTexture.render((SCREEN_WIDTH * 0.5) - (gTextTexture.getWidth() * 0.5), 16);
 
@@ -31,7 +41,5 @@ void MenuScene::update(Game& game)
 	gLogoTexture.render((SCREEN_WIDTH * 0.5) - (gLogoTexture.getWidth() * 0.5), (SCREEN_HEIGHT * 0.2) - (gLogoTexture.getHeight() * 0.5));
 	
 	//Credits
-	game.updateCreditHUD();
-
-	
+	profile.updateCreditHUD();
 }
