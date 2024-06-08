@@ -98,3 +98,8 @@ void Profile::addScore(int score, int player)
 {
 	pScore[player] += score;
 }
+
+void Profile::decrementLife(int player)
+{
+	pLife[player]--;
+}

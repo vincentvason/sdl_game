@@ -11,7 +11,7 @@ public:
 	BulletEntity() {};
 	BulletEntity(LTexture* sprite);
 	SDL_Rect getPosition();
-	void init(int x = 0, int y = 0, enum Facing dir = FACING_DOWN, enum Owner owner = FREE);
+	void init(int x = 0, int y = 0, enum Facing dir = FACING_DOWN, enum Owner owner = OWNER_FREE);
 	void update(TileGroup& tileGroup);
 	bool getActive() { return isActive; };
 	void setActive(bool active);
@@ -19,7 +19,7 @@ public:
 protected:
 	bool isActive = false;
 	int mVelX = 0, mVelY = 0;
-	enum Owner mOwner = FREE;
+	enum Owner mOwner = OWNER_FREE;
 
 	int mLifeSpan = 0;
 	float mAnimFrame = 0;
@@ -41,7 +41,7 @@ public:
 	BulletGroup(int bulletSlot = 4);
 	std::vector<BulletEntity> getBulletVector();
 
-	void init(SDL_Rect playerPosition, enum Facing dir = FACING_DOWN, enum Owner owner = FREE);
+	void init(SDL_Rect playerPosition, enum Facing dir = FACING_DOWN, enum Owner owner = OWNER_FREE);
 	void update(TileGroup& tileGroup);
 	bool checkCollisionToEnemies(EnemySpawner& enemies);
 

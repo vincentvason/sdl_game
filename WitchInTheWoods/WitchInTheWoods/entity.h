@@ -7,10 +7,10 @@ public:
 	virtual void update() {};
 
 	enum Owner {
-		FREE,
-		PLAYER_1,
-		PLAYER_2,
-		ENEMY
+		OWNER_FREE,
+		OWNER_PLAYER_1,
+		OWNER_PLAYER_2,
+		OWNER_ENEMY
 	};
 
 	enum Facing {

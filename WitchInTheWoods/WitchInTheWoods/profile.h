@@ -3,6 +3,11 @@
 
 class Profile {
 public:
+	enum PlayerIndex {
+		PLAYER_1,
+		PLAYER_2
+	};
+
 	Profile() {};
 	void insertCredit();
 	bool usedCredit();
@@ -11,6 +16,9 @@ public:
 	void updateBottomHUD();
 
 	void addScore(int score, int player = 0);
+
+	int getLife(int player) { return pLife[player]; };
+	void decrementLife(int player = 0);
 
 	int getCredit() { return mCredit; };
 	int getHighScore() { return mHighScore; };

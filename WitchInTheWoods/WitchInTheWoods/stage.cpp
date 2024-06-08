@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <cmath>
+#include <algorithm>
 
 void Stage::getStageFromFile(int stage_no, TileGroup& tiles, EnemySpawner& enemies, PlayerGroup& players)
 {
@@ -87,6 +88,7 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 	int egy = (enemyPos.y - STAGE_Y_BEGIN) / 32;
 	int pgx = (playerPos.x - STAGE_X_BEGIN) / 32;
 	int pgy = (playerPos.y - STAGE_Y_BEGIN) / 32;
+	//printf("player %d,%d\n",pgx,pgy);
 
 	Cell q;
 	q.dir = IDLE;
@@ -99,17 +101,18 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 	
 	vOpenList.push_back(q);
 
-//	printf("listing closed list\n");
+	//printf("listing closed list\n");
 	do
 	{
 		int iw = findTheLeastWeightCell();
 		q = vOpenList[iw];
 		vOpenList.erase(vOpenList.begin() + iw);
 		addQSuccessorToOpenList(tiles, q, pgx, pgy);
+		//printf("dir:%d %d,%d->%d,%d\n", q.dir, q.parentX, q.parentY, q.currentX, q.currentY);
 		vCloseList.push_back(q);
 	} while (q.h > 0);
 
-//	printf("only linked to parent\n");
+	//printf("only linked to parent\n");
 	for (int i = vCloseList.size() - 2; i >= 0; i--)
 	{
 		if (vCloseList[i].currentX == q.parentX && vCloseList[i].currentY == q.parentY)
@@ -122,11 +125,16 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 		}
 	}
 
+	//for(int i = 0; i < vCloseList.size(); i++)
+		//printf("dir:%d %d,%d->%d,%d\n", vCloseList[i].dir, vCloseList[i].parentX, vCloseList[i].parentY, vCloseList[i].currentX, vCloseList[i].currentY);
+	
+
+	//printf("add movement to an enemy\n");
 	Facing currentDir = IDLE;
+	enemies.vEnemy[ei].clearMovement();
 	if (vCloseList.size() >= 2)
 	{
 		currentDir = vCloseList[1].dir;
-		enemies.vEnemy[ei].clearMovement();
 		for (int i = 2; i < vCloseList.size() - 1; i++)
 		{
 			if (vCloseList[i].dir != currentDir)
@@ -134,18 +142,18 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 				int x = STAGE_X_BEGIN + (vCloseList[i].parentX * 32);
 				int y = STAGE_Y_BEGIN + (vCloseList[i].parentY * 32);
 				enemies.vEnemy[ei].addMovement(currentDir, x, y);
-				//printf("dir:%d to:%d,%d\n", currentDir, vCloseList[i].parentX, vCloseList[i].parentY);
+				//printf("dir:%d to:%d,%d\n", currentDir, x, y);
 				currentDir = vCloseList[i].dir;
 			}
 		}
 
-		if ((vCloseList[vCloseList.size() - 2].dir != vCloseList[vCloseList.size() - 1].dir))
+		if ((vCloseList[vCloseList.size() - 2].dir != vCloseList[vCloseList.size() - 1].dir) && (vCloseList[vCloseList.size() - 2].dir != IDLE))
 		{
 			currentDir = vCloseList[vCloseList.size() - 2].dir;
 			int x = STAGE_X_BEGIN + (vCloseList[vCloseList.size() - 1].parentX * 32);
 			int y = STAGE_Y_BEGIN + (vCloseList[vCloseList.size() - 1].parentY * 32);
 			enemies.vEnemy[ei].addMovement(currentDir, x, y);
-			//printf("dir:%d to:%d,%d\n", currentDir, vCloseList[vCloseList.size() - 1].currentX, vCloseList[vCloseList.size() - 1].currentY);
+			//printf("dir:%d to:%d,%d\n", currentDir, x, y);
 		}
 	}
 	if (vCloseList.size() >= 1)
@@ -154,8 +162,9 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 		int x = STAGE_X_BEGIN + (vCloseList[vCloseList.size() - 1].currentX * 32);
 		int y = STAGE_Y_BEGIN + (vCloseList[vCloseList.size() - 1].currentY * 32);
 		enemies.vEnemy[ei].addMovement(currentDir, x, y);
-		//printf("dir:%d to:%d,%d\n", currentDir, vCloseList[vCloseList.size() - 1].currentX, vCloseList[vCloseList.size() - 1].currentY);
+		//printf("dir:%d to:%d,%d\n", currentDir, x, y);
 	}
+ 	enemies.vEnemy[ei].updateMoveList();
 
 	vCloseList.clear();
 	vOpenList.clear();
@@ -191,15 +200,20 @@ void Stage::addQSuccessorToOpenList(TileGroup tiles, Cell q, int pgx, int pgy)
 	int diffY[4] = { 0, 0, -1, 1 };
 	Facing dir[4] = {FACING_LEFT, FACING_RIGHT, FACING_UP, FACING_DOWN};
 
+	int order[4] = {0, 1, 2, 3};
+	std::random_shuffle(std::begin(order), std::end(order));
+	
+
 	for (int i = 0; i < 4; i++)
 	{
-		if ((q.currentX + diffX[i]) >= 0 && (q.currentX + diffX[i]) < 14 && (q.currentY + diffY[i]) >= 0 && (q.currentY + diffY[i]) < 18)
+		int oi = order[i];
+		if ((q.currentX + diffX[oi]) >= 0 && (q.currentX + diffX[oi]) < 14 && (q.currentY + diffY[oi]) >= 0 && (q.currentY + diffY[oi]) < 18)
 		{
-			if (tiles.vTile[(q.currentY + diffY[i]) * 14 + q.currentX + diffX[i]].getPassable() == true)
+			if (tiles.vTile[(q.currentY + diffY[oi]) * 14 + q.currentX + diffX[oi]].getPassable() == true)
 			{
-				qS.dir = dir[i];
-				qS.currentX = q.currentX + diffX[i];
-				qS.currentY = q.currentY + diffY[i];
+				qS.dir = dir[oi];
+				qS.currentX = q.currentX + diffX[oi];
+				qS.currentY = q.currentY + diffY[oi];
 				qS.parentX = q.currentX;
 				qS.parentY = q.currentY;
 				qS.g = q.g + 1;

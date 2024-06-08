@@ -11,22 +11,6 @@ PlayerEntity::PlayerEntity(LTexture* sprite, int x, int y)
 	mCollider.h = 32;
 }
 
-SDL_Rect PlayerEntity::getPosition()
-{
-	return mCollider;
-}
-
-void PlayerEntity::setPosition(int x, int y)
-{
-	mCollider.x = x;
-	mCollider.y = y;
-}
-
-Entity::Facing PlayerEntity::getFacing()
-{
-	return mAnimFacing;
-}
-
 void PlayerEntity::update(TileGroup tileGroup)
 {
 	checkBorderCollision();
@@ -34,30 +18,43 @@ void PlayerEntity::update(TileGroup tileGroup)
 	//printf("%d(%f), %d(%f), %s\n", mCollider.x, (mCollider.x - STAGE_X_BEGIN)/ 32.0, mCollider.y, (mCollider.y - STAGE_Y_BEGIN) / 32.0, mSprite->getFilePath().c_str());
 
 	int anim;
-	switch (mAnimFacing)
-	{
-	case FACING_DOWN:
-		anim = 0;
-		break;
-	case FACING_LEFT:
-		anim = 4;
-		break;
-	case FACING_UP:
-		anim = 8;
-		break;
-	case FACING_RIGHT:
-		anim = 12;
-		break;
-	case DYING:
-		anim = 16;
-		break;
-	}
+	int frame;
+	SDL_Rect clip;
 
-	SDL_Rect clip = { 32 * (anim + (int)mAnimWalking), 0, 32, 32 };
-	mSprite->render(mCollider.x, mCollider.y, &clip);
+	if (mDeadFrame > 0)
+	{
+		anim = 16;
+		frame = mDeadFrame / (DEFAULT_DEAD_FRAME / 4);
+		clip = { 32 * (anim + frame), 0, 32, 32};
+	}
+	else
+	{
+		switch (mAnimFacing)
+		{
+		case FACING_DOWN:
+			anim = 0;
+			break;
+		case FACING_LEFT:
+			anim = 4;
+			break;
+		case FACING_UP:
+			anim = 8;
+			break;
+		case FACING_RIGHT:
+			anim = 12;
+			break;
+		}
+		clip = { 32 * (anim + (int)mAnimWalking), 0, 32, 32 };
+	}
+	
+	if(((mInvisibleFrame/10) % 2 == 0) && (mDeadFrame < DEFAULT_DEAD_FRAME))
+		mSprite->render(mCollider.x, mCollider.y, &clip);
 
 	mVelX = 0;
 	mVelY = 0;
+
+	if (mInvisibleFrame > 0) mInvisibleFrame--;
+	if (mDeadFrame > 0 && mDeadFrame < DEFAULT_DEAD_FRAME) mDeadFrame++;
 }
 
 void PlayerEntity::move(enum Facing facing)
@@ -102,8 +99,49 @@ void PlayerEntity::shoot()
 	mAnimWalking = 3;	
 }
 
+SDL_Rect PlayerEntity::getPosition()
+{
+	return mCollider;
+}
+
+void PlayerEntity::setPosition(int x, int y)
+{
+	mCollider.x = x;
+	mCollider.y = y;
+}
+
+bool PlayerEntity::getInvisible()
+{
+	if (mInvisibleFrame > 0)
+		return true;
+	else
+		return false;
+}
+
+void PlayerEntity::setInvisible(bool active)
+{
+	if (active)
+		mInvisibleFrame = DEFAULT_INVISIBLE_FRAME;
+	else
+		mInvisibleFrame = 0;
+}
+
+Entity::Facing PlayerEntity::getFacing()
+{
+	return mAnimFacing;
+}
+
+void PlayerEntity::playDeadAnimation()
+{
+	if (mDeadFrame < DEFAULT_DEAD_FRAME) mDeadFrame++;
+}
+
 void PlayerEntity::checkBorderCollision()
 {
+
+	mCollider.x += mVelX;
+	mCollider.y += mVelY;
+
 	if (mCollider.x + mVelX < STAGE_X_BEGIN) mCollider.x = STAGE_X_BEGIN;
 	else if (mCollider.x + mVelX > STAGE_X_END) mCollider.x = STAGE_X_END;
 	else mCollider.x += mVelX;
@@ -142,4 +180,45 @@ void PlayerEntity::checkStageCollision(std::vector<TileEntity> vTile)
 			}
 		}
 	}
+}
+
+void PlayerGroup::checkEnemyCollision(EnemySpawner enemies)
+{
+	for (int ei = 0; ei < enemies.vEnemy.size(); ei++)
+	{
+		if (enemies.vEnemy[ei].getActive() == true)
+		{
+			if(p1.getInvisible() == false)
+			{
+				if (checkCollision(p1.getPosition(), enemies.vEnemy[ei].getPosition()) == true)
+				{
+					profile.decrementLife(Profile::PLAYER_1);
+					if (profile.getLife(Profile::PLAYER_1) > 0)
+						p1.setInvisible(true);
+					else
+						p1.playDeadAnimation();
+				}
+			}
+
+			if (p2.getInvisible() == false)
+			{
+				if (checkCollision(p2.getPosition(), enemies.vEnemy[ei].getPosition()) == true)
+				{
+					profile.decrementLife(Profile::PLAYER_2);
+					if (profile.getLife(Profile::PLAYER_2) > 0)
+						p2.setInvisible(true);
+					else
+						p2.playDeadAnimation();
+				}
+			}
+		}
+	}
+}
+
+void PlayerGroup::move(int player, Facing dir)
+{
+	if (player == Profile::PLAYER_1 && profile.getLife(Profile::PLAYER_1) > 0)
+		p1.move(dir);
+	else if (player == Profile::PLAYER_2 && profile.getLife(Profile::PLAYER_2) > 0)
+		p2.move(dir);
 }

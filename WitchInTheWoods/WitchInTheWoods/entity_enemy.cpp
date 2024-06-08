@@ -1,5 +1,7 @@
 #include "entity_enemy.h"
+#include "profile.h"
 #include <cmath>
+#include <cstdlib>
 
 EnemyEntity::EnemyEntity(LTexture* sprite, int x, int y)
 {
@@ -45,8 +47,6 @@ void EnemyEntity::init(LTexture* sprite, int x, int y)
 
 void EnemyEntity::update(TileGroup tiles)
 {
-	mCollider.x += mVelX;
-	mCollider.y += mVelY;
 
 	int anim;
 	SDL_RendererFlip flip;
@@ -81,7 +81,7 @@ void EnemyEntity::update(TileGroup tiles)
 }
 
 
-void EnemyEntity::move()
+void EnemyEntity::move(EnemySpawner enemies, TileGroup tiles)
 {
 	checkMoveList();
 
@@ -98,7 +98,7 @@ void EnemyEntity::move()
 		if (mCollider.y + DEFAULT_VEL > mDestY)
 		{
 			mVelY = mDestY - mCollider.y;
-			updateMoveList();
+			nextMovement();
 		}
 		else
 		{
@@ -111,7 +111,7 @@ void EnemyEntity::move()
 		if (mCollider.y - DEFAULT_VEL < mDestY)
 		{
 			mVelY = mCollider.y - mDestY;
-			updateMoveList();
+			nextMovement();
 		}
 		else
 		{
@@ -125,7 +125,7 @@ void EnemyEntity::move()
 		if (mCollider.x + DEFAULT_VEL > mDestX)
 		{
 			mVelX = mDestX - mCollider.x;
-			updateMoveList();
+			nextMovement();
 		}
 		else
 		{
@@ -138,7 +138,7 @@ void EnemyEntity::move()
 		if (mCollider.x - DEFAULT_VEL < mDestX)
 		{
 			mVelX = mCollider.x - mDestX;
-			updateMoveList();
+			nextMovement();
 		}
 		else
 		{
@@ -147,7 +147,13 @@ void EnemyEntity::move()
 		break;	
 	}
 
-	
+	checkBorderCollision();
+	checkStageCollision(tiles.vTile);
+	if (checkEnemiesCollision(enemies) == true)
+	{
+		mCollider.x -= mVelX;
+		mCollider.y -= mVelY;
+	}
 	
 
 	if (mVelX != 0 || mVelY != 0)
@@ -208,23 +214,65 @@ void EnemyEntity::checkStageCollision(std::vector<TileEntity> vTile)
 	}
 }
 
+bool EnemyEntity::checkEnemiesCollision(EnemySpawner enemies)
+{
+	SDL_Rect dest;
+	dest.x = mCollider.x;
+	dest.y = mCollider.y;
+	dest.w = 32;
+	dest.h = 32;
+
+	for (int i = 0; i < enemies.pEnemySlot; i++)
+	{
+		SDL_Rect comp = enemies.vEnemy[i].getPosition();
+		if (std::abs(comp.x-dest.x) < 2 && std::abs(comp.y-dest.y) < 2)
+		{
+			//skipped
+		}
+		else
+		{
+			//printf("i=%d / comp=%d,%d / self=%d,%d\n", i, comp.x, comp.y, dest.x, dest.y);
+			if ((enemies.vEnemy[i].getPosition().x - 16) % 32 == 0 && (enemies.vEnemy[i].getPosition().y - 32) % 32 == 0)
+			{
+				if (checkCollision(dest, comp))
+				{
+					return true;
+				}
+			}
+			else
+			{
+				if (checkCollision(dest, comp))
+				{
+					
+				}
+			}
+		}
+	}
+
+
+	return false;
+}
+
 void EnemyEntity::checkMoveList()
 {
-	if (vCommand.size() == 0)
+	if (vCommand.size() > 0)
+	{
+			mMove = vCommand[0].dir;
+			mDestX = vCommand[0].posX;
+			mDestY = vCommand[0].posY;
+	}
+	else
 	{
 		mMove = IDLE;
 	}
-	if (vCommand.size() > 0)
-	{
-		mMove = vCommand[0].dir;
-		mDestX = vCommand[0].posX;
-		mDestY = vCommand[0].posY;
-	}
 }
 
-void EnemyEntity::updateMoveList()
+void EnemyEntity::nextMovement()
 {
-	vCommand.erase(vCommand.begin());
+	if (vCommand.size() > 0)
+	{
+		vCommand.erase(vCommand.begin());
+	}
 }
 
 void EnemyEntity::addMovement(Entity::Facing dir, int x, int y)
@@ -241,11 +289,19 @@ void EnemyEntity::clearMovement()
 	vCommand.clear();
 }
 
-void EnemySpawner::update(TileGroup tiles)
+void EnemyEntity::updateMoveList()
+{
+	//do nothing
+}
+
+void EnemySpawner::update(TileGroup tiles, EnemySpawner enemies)
 {
 	for (int i = 0; i < pEnemySlot; i++)
 	{
-		vEnemy[i].move();
+		if (profile.getLife(0) > 0 || profile.getLife(1) > 0)
+		{
+			vEnemy[i].move(enemies, tiles);
+		}
 		vEnemy[i].update(tiles);
 	}
 }

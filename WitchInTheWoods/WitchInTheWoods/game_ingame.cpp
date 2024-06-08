@@ -8,10 +8,10 @@ GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 	{
 		switch (e->key.keysym.sym)
 		{
-		case SDLK_w: players.p1.move(Entity::FACING_UP); break;
-		case SDLK_a: players.p1.move(Entity::FACING_LEFT); break;
-		case SDLK_s: players.p1.move(Entity::FACING_DOWN); break;
-		case SDLK_d: players.p1.move(Entity::FACING_RIGHT); break;
+		case SDLK_w: players.move(Profile::PLAYER_1, Entity::FACING_UP); break;
+		case SDLK_a: players.move(Profile::PLAYER_1, Entity::FACING_LEFT); break;
+		case SDLK_s: players.move(Profile::PLAYER_1, Entity::FACING_DOWN); break;
+		case SDLK_d: players.move(Profile::PLAYER_1, Entity::FACING_RIGHT); break;
 		}
 	}
 	
@@ -21,7 +21,7 @@ GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 		{
 		case SDLK_g: 
 			players.p1.shoot();
-			bullets.init(players.p1.getPosition(), players.p1.getFacing(), Entity::PLAYER_1);
+			bullets.init(players.p1.getPosition(), players.p1.getFacing(), Entity::OWNER_PLAYER_1);
 			break;
 		case SDLK_BACKSPACE:
 			return &menu;
@@ -29,7 +29,7 @@ GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 			profile.insertCredit(); 
 			break;
 		case SDLK_LSHIFT: 
-			if (profile.getPlayerIn(0) == false)
+			if (profile.getPlayerIn(Profile::PLAYER_1) == false)
 			{ 
 				if (profile.usedCredit())
 				{
@@ -39,7 +39,7 @@ GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 			}
 			else break;
 		case SDLK_RSHIFT:
-			if (profile.getPlayerIn(1) == false)
+			if (profile.getPlayerIn(Profile::PLAYER_2) == false)
 			{
 				if (profile.usedCredit())
 				{
@@ -68,8 +68,8 @@ void InGameScene::update(Game& game)
 	SDL_RenderFillRect(gRenderer, &stageBackground);
 
 	//Set Active
-	players.p1.setActive(profile.getPlayerIn(0));
-	players.p2.setActive(profile.getPlayerIn(1));
+	players.p1.setActive(profile.getPlayerIn(Profile::PLAYER_1));
+	players.p2.setActive(profile.getPlayerIn(Profile::PLAYER_2));
 
 	//Load Stage (if it's not loaded)
 	if (isStageLoaded == false)
@@ -83,10 +83,11 @@ void InGameScene::update(Game& game)
 
 	stage.setAllEnemiesMovement(tiles, enemies, players);
 	bullets.checkCollisionToEnemies(enemies);
+	players.checkEnemyCollision(enemies);
 
 	//Rendering
+	enemies.update(tiles, enemies);
 	players.p1.update(tiles);
-	enemies.update(tiles);
 	bullets.update(tiles);
 	tiles.update();
 }

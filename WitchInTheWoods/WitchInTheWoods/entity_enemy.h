@@ -4,6 +4,8 @@
 #include "entity_tile.h"
 #include <vector>
 
+class EnemySpawner;
+
 class EnemyEntity : public Entity
 {
 public:
@@ -18,7 +20,7 @@ public:
 	void init(LTexture* sprite, int x = 0, int y = 0);
 	void update(TileGroup tiles);
 
-	void move();
+	void move(EnemySpawner enemies, TileGroup tiles);
 	void shoot();
 	SDL_Rect getPosition();
 	Entity::Facing getFacing();
@@ -27,9 +29,6 @@ public:
 
 	void checkMoveList();
 	void updateMoveList();
-
-	void checkBorderCollision();
-	void checkStageCollision(std::vector<TileEntity> vTile);
 	void addMovement(Entity::Facing dir, int x, int y);
 	void clearMovement();
 
@@ -48,6 +47,13 @@ protected:
 
 	std::vector<EnemyCommand> vCommand;
 
+	void checkBorderCollision();
+	void checkStageCollision(std::vector<TileEntity> vTile);
+	bool checkEnemiesCollision(EnemySpawner enemies);
+
+	void nextMovement();
+	
+
 private:
 	const float DEFAULT_VEL = 1;
 	const float DEFAULT_STEP_SPEED = 0.5;
@@ -60,7 +66,7 @@ class EnemySpawner : public Entity
 {
 public:
 	EnemySpawner() {};
-	void update(TileGroup tiles);
+	void update(TileGroup tiles, EnemySpawner enemies);
 	void insertSpawnPoint(int index);
 	void spawnEnemyInOrder(int order);
 

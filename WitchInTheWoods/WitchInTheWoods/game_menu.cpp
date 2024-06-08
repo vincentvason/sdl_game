@@ -12,13 +12,13 @@ GameScene* MenuScene::handleEvent(Game& game, SDL_Event* e)
 		case SDLK_LSHIFT: 
 			if (profile.usedCredit()) 
 			{ 
-				profile.setPlayerIn(0, true);
+				profile.setPlayerIn(Profile::PLAYER_1, true);
 				return &ingame; 
 			}
 		case SDLK_RSHIFT:
 			if (profile.usedCredit())
 			{
-				profile.setPlayerIn(1, true);
+				profile.setPlayerIn(Profile::PLAYER_2, true);
 				return &ingame;
 			}
 		}

@@ -12,6 +12,11 @@ public:
 	void setAllEnemiesMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGroup& players);
 
 protected:
+	struct EnemyPosition {
+		int gx;
+		int gy;
+	};
+
 	struct Cell {
 		int currentX = -1, currentY = -1;
 		int parentX = -1, parentY = -1;
