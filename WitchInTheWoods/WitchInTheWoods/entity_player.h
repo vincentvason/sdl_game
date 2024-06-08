@@ -9,8 +9,8 @@ class PlayerEntity : public Entity
 {
 public:
 	PlayerEntity(LTexture* sprite, int x = 0, int y = 0);
+	void init();
 	void update(TileGroup tileGroup);
-
 	void move(enum Facing facing);
 	void shoot();
 	SDL_Rect getPosition();
@@ -20,6 +20,7 @@ public:
 	bool getInvisible();
 	void setInvisible(bool active);
 	Entity::Facing getFacing();
+	bool getDeadStatus() { return isDead; };
 	void playDeadAnimation();
 
 
@@ -32,6 +33,7 @@ protected:
 
 	int mInvisibleFrame = 0;
 	int mDeadFrame = 0;
+	bool isDead = false;
 
 	SDL_Rect mCollider;
 	LTexture* mSprite;
@@ -46,8 +48,8 @@ private:
 	const int WALKING_FRAME = 3;
 	const int ATTACK_SPRITE = 3;
 
-	void checkBorderCollision();
-	void checkStageCollision(std::vector<TileEntity> vTile);
+	bool snapBorderCollision();
+	bool snapStageCollision(std::vector<TileEntity> vTile);
 	
 };
 
@@ -59,4 +61,5 @@ public:
 
 	void checkEnemyCollision(EnemySpawner enemies);
 	void move(int player, Facing dir);
+	void update(TileGroup tileGroup);
 };

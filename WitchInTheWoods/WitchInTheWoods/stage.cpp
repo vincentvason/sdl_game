@@ -100,7 +100,7 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 	q.h = getEstimateDistance(egx, egy, pgx, pgy);
 	
 	vOpenList.push_back(q);
-
+	
 	//printf("listing closed list\n");
 	do
 	{
@@ -113,22 +113,26 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 	} while (q.h > 0);
 
 	//printf("only linked to parent\n");
-	for (int i = vCloseList.size() - 2; i >= 0; i--)
+	
+	if(vCloseList.size() >= 3)
 	{
-		if (vCloseList[i].currentX == q.parentX && vCloseList[i].currentY == q.parentY)
+		for (int i = vCloseList.size() - 2; i >= 0; i--)
 		{
-			q = vCloseList[i];
-		}
-		else
-		{
-			vCloseList.erase(vCloseList.begin() + i);
+			if (vCloseList[i].currentX == q.parentX && vCloseList[i].currentY == q.parentY)
+			{
+				q = vCloseList[i];
+			}
+			else
+			{
+				vCloseList.erase(vCloseList.begin() + i);
+			}
 		}
 	}
 
 	//for(int i = 0; i < vCloseList.size(); i++)
 		//printf("dir:%d %d,%d->%d,%d\n", vCloseList[i].dir, vCloseList[i].parentX, vCloseList[i].parentY, vCloseList[i].currentX, vCloseList[i].currentY);
 	
-
+	
 	//printf("add movement to an enemy\n");
 	Facing currentDir = IDLE;
 	enemies.vEnemy[ei].clearMovement();
@@ -156,6 +160,7 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 			//printf("dir:%d to:%d,%d\n", currentDir, x, y);
 		}
 	}
+	
 	if (vCloseList.size() >= 1)
 	{
 		currentDir = vCloseList[vCloseList.size() - 1].dir;

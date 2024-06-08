@@ -11,11 +11,22 @@ PlayerEntity::PlayerEntity(LTexture* sprite, int x, int y)
 	mCollider.h = 32;
 }
 
+void PlayerEntity::init()
+{
+	mDeadFrame = 0;
+	isDead = false;
+}
+
 void PlayerEntity::update(TileGroup tileGroup)
 {
-	checkBorderCollision();
-	checkStageCollision(tileGroup.vTile);
-	//printf("%d(%f), %d(%f), %s\n", mCollider.x, (mCollider.x - STAGE_X_BEGIN)/ 32.0, mCollider.y, (mCollider.y - STAGE_Y_BEGIN) / 32.0, mSprite->getFilePath().c_str());
+	if (snapBorderCollision() == false)
+	{
+		if (snapStageCollision(tileGroup.vTile) == false)
+		{
+			mCollider.x += mVelX;
+			mCollider.y += mVelY;
+		}
+	}
 
 	int anim;
 	int frame;
@@ -54,7 +65,11 @@ void PlayerEntity::update(TileGroup tileGroup)
 	mVelY = 0;
 
 	if (mInvisibleFrame > 0) mInvisibleFrame--;
-	if (mDeadFrame > 0 && mDeadFrame < DEFAULT_DEAD_FRAME) mDeadFrame++;
+
+	if (mDeadFrame > 0 && mDeadFrame < DEFAULT_DEAD_FRAME)
+		mDeadFrame++;
+	else if (mDeadFrame == DEFAULT_DEAD_FRAME)
+		isDead = true;
 }
 
 void PlayerEntity::move(enum Facing facing)
@@ -136,35 +151,71 @@ void PlayerEntity::playDeadAnimation()
 	if (mDeadFrame < DEFAULT_DEAD_FRAME) mDeadFrame++;
 }
 
-void PlayerEntity::checkBorderCollision()
+bool PlayerEntity::snapBorderCollision()
 {
 
-	mCollider.x += mVelX;
-	mCollider.y += mVelY;
+	if (mCollider.x + mVelX < STAGE_X_BEGIN)
+	{
+		mCollider.x = STAGE_X_BEGIN;
+		return true;
+	}
+	else if (mCollider.x + mVelX > STAGE_X_END)
+	{
+		mCollider.x = STAGE_X_END;
+		return true;
+	}
+	else
+	{
+		mCollider.x += mVelX;
+	}
 
-	if (mCollider.x + mVelX < STAGE_X_BEGIN) mCollider.x = STAGE_X_BEGIN;
-	else if (mCollider.x + mVelX > STAGE_X_END) mCollider.x = STAGE_X_END;
-	else mCollider.x += mVelX;
+	if (mCollider.y + mVelY < STAGE_Y_BEGIN)
+	{
+		mCollider.y = STAGE_Y_BEGIN;
+		return true;
+	}
+	else if (mCollider.y + mVelY > STAGE_Y_END)
+	{
+		mCollider.y = STAGE_Y_END;
+		return true;
+	}
+	else
+	{
+		mCollider.y += mVelY;
+	}
 
-	if (mCollider.y + mVelY < STAGE_Y_BEGIN) mCollider.y = STAGE_Y_BEGIN;
-	else if (mCollider.y + mVelY > STAGE_Y_END) mCollider.y = STAGE_Y_END;
-	else mCollider.y += mVelY;
+	return false;
 }
 
-void PlayerEntity::checkStageCollision(std::vector<TileEntity> vTile)
+bool PlayerEntity::snapStageCollision(std::vector<TileEntity> vTile)
 {
 	float gx = (mCollider.x - STAGE_X_BEGIN) / 32.0;
 	float gy = (mCollider.y - STAGE_Y_BEGIN) / 32.0;
 
-	
-	int gCheck[4] = {
+	const int SLOT = 12;
+
+	int gCheck[SLOT] = {
+		((std::floor(gy - 1) * 14) + std::floor(gx)),
+		((std::floor(gy) * 14) + std::floor(gx - 1)),
 		((std::floor(gy) * 14) + std::floor(gx)),
+		((std::floor(gy - 1) * 14) + std::ceil(gx)),
+		((std::floor(gy) * 14) + std::ceil(gx + 1)),
 		((std::floor(gy) * 14) + std::ceil(gx)),
+		((std::ceil(gy + 1) * 14) + std::floor(gx)),
+		((std::ceil(gy) * 14) + std::floor(gx - 1)),
 		((std::ceil(gy) * 14) + std::floor(gx)),
+		((std::ceil(gy + 1) * 14) + std::ceil(gx)),
+		((std::ceil(gy) * 14) + std::ceil(gx + 1)),
 		((std::ceil(gy) * 14) + std::ceil(gx))
 	};
 
-	for (int i = 0; i < 4; i++)
+	SDL_Rect futurePlayerRect;
+	futurePlayerRect.x = mCollider.x + mVelX;
+	futurePlayerRect.y = mCollider.y + mVelY;
+	futurePlayerRect.w = mCollider.w;
+	futurePlayerRect.h = mCollider.h;
+
+	for (int i = 0; i < SLOT; i++)
 	{
 		if (gCheck[i] >= 0 && gCheck[i] < 14 * 18)
 		{
@@ -172,14 +223,17 @@ void PlayerEntity::checkStageCollision(std::vector<TileEntity> vTile)
 			
 			//SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0x00);
 			//SDL_RenderFillRect(gRenderer, &rectCheck);
-
-			if (vTile[gCheck[i]].getPassable() == false && Entity::checkCollision(rectCheck, mCollider) == true)
+			if (vTile[gCheck[i]].getPassable() == false && Entity::checkCollision(rectCheck, futurePlayerRect) == true)
 			{
-				mCollider.x -= mVelX;
-				mCollider.y -= mVelY;
+				if (mVelX < 0) mCollider.x = rectCheck.x + 32;
+				if (mVelX > 0) mCollider.x = rectCheck.x - 32;
+				if (mVelY < 0) mCollider.y = rectCheck.y + 32;
+				if (mVelY > 0) mCollider.y = rectCheck.y - 32;
+				return true;
 			}
 		}
 	}
+	return false;
 }
 
 void PlayerGroup::checkEnemyCollision(EnemySpawner enemies)
@@ -221,4 +275,17 @@ void PlayerGroup::move(int player, Facing dir)
 		p1.move(dir);
 	else if (player == Profile::PLAYER_2 && profile.getLife(Profile::PLAYER_2) > 0)
 		p2.move(dir);
+}
+
+void PlayerGroup::update(TileGroup tileGroup)
+{
+	if (p1.getActive() == true)
+		p1.update(tileGroup);
+	if (p2.getActive() == true)
+		p2.update(tileGroup);
+
+	if (p1.getDeadStatus() == true)
+		profile.setPlayerIn(Profile::PLAYER_1, false);
+	if (p2.getDeadStatus() == true)
+		profile.setPlayerIn(Profile::PLAYER_2, false);
 }

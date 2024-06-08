@@ -21,7 +21,8 @@ GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 		{
 		case SDLK_g: 
 			players.p1.shoot();
-			bullets.init(players.p1.getPosition(), players.p1.getFacing(), Entity::OWNER_PLAYER_1);
+			if(profile.getLife(Profile::PLAYER_1) > 0)
+				bullets.init(players.p1.getPosition(), players.p1.getFacing(), Entity::OWNER_PLAYER_1);
 			break;
 		case SDLK_BACKSPACE:
 			return &menu;
@@ -33,6 +34,7 @@ GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 			{ 
 				if (profile.usedCredit())
 				{
+					players.p1.init();
 					profile.setPlayerIn(0, true);
 					break; 
 				} 
@@ -43,6 +45,7 @@ GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 			{
 				if (profile.usedCredit())
 				{
+					players.p2.init();
 					profile.setPlayerIn(1, true);
 					break;
 				}
@@ -87,7 +90,10 @@ void InGameScene::update(Game& game)
 
 	//Rendering
 	enemies.update(tiles, enemies);
-	players.p1.update(tiles);
+	players.update(tiles);
 	bullets.update(tiles);
 	tiles.update();
+
+	if (profile.getPlayerIn(Profile::PLAYER_1) == false && profile.getPlayerIn(Profile::PLAYER_2) == false)
+		profile.updateGameOverHUD();
 }

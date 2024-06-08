@@ -11,9 +11,11 @@ public:
 	Profile() {};
 	void insertCredit();
 	bool usedCredit();
+
 	void updateCreditHUD();
 	void updatePlayerHUD();
 	void updateBottomHUD();
+	void updateGameOverHUD();
 
 	void addScore(int score, int player = 0);
 
@@ -23,17 +25,20 @@ public:
 	int getCredit() { return mCredit; };
 	int getHighScore() { return mHighScore; };
 	bool getPlayerIn(int player) { return pIn[player]; };
-	void setPlayerIn(int player, bool status) { pIn[player] = status; };
+	void setPlayerIn(int player, bool status);
 
 
 private:
-	int pScore[2] = { 0 }, pLife[2] = { 3 };
+	int pScore[2] = { -1 }, pLife[2] = { 3 };
 	int pStage = 1;
 	bool isStageLoaded = false;
 
 	int mCredit = 0;
 	int mHighScore = 10000;
 	bool pIn[2] = { false };
+
+	int DEFAULT_GAMEOVER_COUNTDOWN = 1000;
+	int mGameOverCountdown = DEFAULT_GAMEOVER_COUNTDOWN - 1;
 };
 
 extern Profile profile;

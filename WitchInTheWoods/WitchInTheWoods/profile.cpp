@@ -18,6 +18,18 @@ bool Profile::usedCredit()
 	return false;
 }
 
+void Profile::setPlayerIn(int player, bool status)
+{
+	if (status == true)
+	{
+		pLife[player] = 3;
+		pScore[player]++;
+		mGameOverCountdown = DEFAULT_GAMEOVER_COUNTDOWN - 1;
+	}
+
+	pIn[player] = status;
+}
+
 void Profile::updateCreditHUD()
 {
 	char string[11];
@@ -56,6 +68,7 @@ void Profile::updatePlayerHUD()
 		gTextTexture.render(0, 16);
 	}
 
+	/*
 	if (pIn[1] == true)
 	{
 		sprintf_s(string, 11, "P2 %07d", pScore[0]);
@@ -80,6 +93,7 @@ void Profile::updatePlayerHUD()
 		gTextTexture.loadFromRenderedText(string, gTextColor_White);
 		gTextTexture.render(320, 16);
 	}
+	*/
 }
 
 void Profile::updateBottomHUD()
@@ -92,6 +106,27 @@ void Profile::updateBottomHUD()
 	sprintf_s(string, 11, "HI %07d", mHighScore);
 	gTextTexture.loadFromRenderedText(string, gTextColor_White);
 	gTextTexture.render(0, 624);
+}
+
+void Profile::updateGameOverHUD()
+{
+	char string[11];
+	int count = mGameOverCountdown / (DEFAULT_GAMEOVER_COUNTDOWN / 10);
+	int X = 160, Y = 256;
+
+	SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
+
+	sprintf_s(string, 11, "CONTINUE %d", count);
+	gTextTexture.loadFromRenderedText(string, gTextColor_White);
+	
+	SDL_Rect rect = { X, Y, gTextTexture.getWidth(), gTextTexture.getHeight()};
+
+	SDL_RenderDrawRect(gRenderer, &rect);
+	SDL_RenderFillRect(gRenderer, &rect);
+
+	gTextTexture.render(X, Y);
+
+	if(mGameOverCountdown > 0) mGameOverCountdown--;
 }
 
 void Profile::addScore(int score, int player)
