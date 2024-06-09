@@ -39,6 +39,9 @@ void MenuScene::update(Game& game)
 
 	//Logo
 	gLogoTexture.render((SCREEN_WIDTH * 0.5) - (gLogoTexture.getWidth() * 0.5), (SCREEN_HEIGHT * 0.2) - (gLogoTexture.getHeight() * 0.5));
+
+	gTextTexture.loadFromRenderedText("DEMO", gTextColor_White);
+	gTextTexture.render((SCREEN_WIDTH * 0.5) - (gTextTexture.getWidth() * 0.5), (SCREEN_HEIGHT * 0.4) - (gTextTexture.getHeight() * 0.5));
 	
 	//Credits
 	profile.updateCreditHUD();

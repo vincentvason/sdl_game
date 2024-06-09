@@ -10,6 +10,8 @@ void Stage::getStageFromFile(int stage_no, TileGroup& tiles, EnemySpawner& enemi
 {
 	std::ifstream stageFile("stage/stage_" + std::to_string(stage_no) + ".csv");
 
+	tiles.vTile = std::vector<TileEntity>(tiles.pTileSlot, TileEntity());
+
 	if (!stageFile.is_open() && pLastStage == 0)
 	{
 		pLastStage = stage_no - 1;
@@ -136,7 +138,7 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 	//printf("add movement to an enemy\n");
 	Facing currentDir = IDLE;
 	enemies.vEnemy[ei].clearMovement();
-	if (vCloseList.size() >= 2)
+	if (vCloseList.size() >= 3)
 	{
 		currentDir = vCloseList[1].dir;
 		for (int i = 2; i < vCloseList.size() - 1; i++)
@@ -161,7 +163,7 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 		}
 	}
 	
-	if (vCloseList.size() >= 1)
+	if (vCloseList.size() >= 2)
 	{
 		currentDir = vCloseList[vCloseList.size() - 1].dir;
 		int x = STAGE_X_BEGIN + (vCloseList[vCloseList.size() - 1].currentX * 32);

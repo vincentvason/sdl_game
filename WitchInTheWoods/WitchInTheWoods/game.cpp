@@ -19,6 +19,15 @@ void Game::handleEvent(SDL_Event* e)
 	}
 }
 
+void Game::sceneTransition()
+{
+	GameScene* scene = mScene->sceneTransition(*this);
+	if (scene != nullptr)
+	{
+		mScene = scene;
+	}
+}
+
 void Game::update()
 {
 	mScene->update(*this);
@@ -37,4 +46,9 @@ GameScene* GameScene::handleEvent(Game& game, SDL_Event* e)
 void GameScene::update(Game& game)
 {
 
+}
+
+GameScene* GameScene::sceneTransition(Game& game)
+{
+	return nullptr;
 }

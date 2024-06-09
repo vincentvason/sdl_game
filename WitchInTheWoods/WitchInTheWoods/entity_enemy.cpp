@@ -2,6 +2,8 @@
 #include "profile.h"
 #include <cmath>
 #include <cstdlib>
+#include <random>
+#include <algorithm>
 
 EnemyEntity::EnemyEntity(LTexture* sprite, int x, int y)
 {
@@ -43,6 +45,9 @@ void EnemyEntity::init(LTexture* sprite, int x, int y)
 	mCollider.y = y;
 	mCollider.w = 32;
 	mCollider.h = 32;
+
+	mWaitTime = 200;
+	mMoveFrame = 0;
 }
 
 void EnemyEntity::update(TileGroup tiles)
@@ -83,7 +88,24 @@ void EnemyEntity::update(TileGroup tiles)
 
 void EnemyEntity::move(EnemySpawner enemies, TileGroup tiles)
 {
-	checkMoveList();
+	mMoveFrame++;
+
+	if (mMoveFrame % 3 == 0)
+	{
+		return;
+	}
+	
+
+	if (mStuckFrame > STUCK_LIMIT)
+	{
+		addRandomMovement(tiles, 1);
+		mStuckFrame = 0;
+	}
+	else
+	{
+		checkMoveList();
+	}
+	
 
 	switch(mMove)
 	{
@@ -147,14 +169,20 @@ void EnemyEntity::move(EnemySpawner enemies, TileGroup tiles)
 		break;	
 	}
 
-	checkBorderCollision();
-	checkStageCollision(tiles.vTile);
-	if (checkEnemiesCollision(enemies) == true)
+	if (snapBorderCollision() == false)
 	{
-		mCollider.x -= mVelX;
-		mCollider.y -= mVelY;
+		if (snapStageCollision(tiles.vTile) == false)
+		{
+			if (snapEnemiesCollision(enemies) == false)
+			{
+				mCollider.x += mVelX;
+				mCollider.y += mVelY;
+			}	
+		}
 	}
-	
+
+	mPastMove = mMove;
+	mPastCollider = mCollider;
 
 	if (mVelX != 0 || mVelY != 0)
 	{
@@ -172,31 +200,71 @@ void EnemyEntity::shoot()
 	mAnimWalking = 3;	
 }
 
-void EnemyEntity::checkBorderCollision()
+bool EnemyEntity::snapBorderCollision()
 {
-	if (mCollider.x + mVelX < STAGE_X_BEGIN) mCollider.x = STAGE_X_BEGIN;
-	else if (mCollider.x + mVelX > STAGE_X_END) mCollider.x = STAGE_X_END;
-	else mCollider.x += mVelX;
 
-	if (mCollider.y + mVelY < STAGE_Y_BEGIN) mCollider.y = STAGE_Y_BEGIN;
-	else if (mCollider.y + mVelY > STAGE_Y_END) mCollider.y = STAGE_Y_END;
-	else mCollider.y += mVelY;
+	if (mCollider.x + mVelX < STAGE_X_BEGIN)
+	{
+		mCollider.x = STAGE_X_BEGIN;
+		return true;
+	}
+	else if (mCollider.x + mVelX > STAGE_X_END)
+	{
+		mCollider.x = STAGE_X_END;
+		return true;
+	}
+	else
+	{
+		mCollider.x += mVelX;
+	}
+
+	if (mCollider.y + mVelY < STAGE_Y_BEGIN)
+	{
+		mCollider.y = STAGE_Y_BEGIN;
+		return true;
+	}
+	else if (mCollider.y + mVelY > STAGE_Y_END)
+	{
+		mCollider.y = STAGE_Y_END;
+		return true;
+	}
+	else
+	{
+		mCollider.y += mVelY;
+	}
+
+	return false;
 }
 
-void EnemyEntity::checkStageCollision(std::vector<TileEntity> vTile)
+bool EnemyEntity::snapStageCollision(std::vector<TileEntity> vTile)
 {
 	float gx = (mCollider.x - STAGE_X_BEGIN) / 32.0;
 	float gy = (mCollider.y - STAGE_Y_BEGIN) / 32.0;
 
+	const int SLOT = 12;
 
-	int gCheck[4] = {
+	int gCheck[SLOT] = {
+		((std::floor(gy - 1) * 14) + std::floor(gx)),
+		((std::floor(gy) * 14) + std::floor(gx - 1)),
 		((std::floor(gy) * 14) + std::floor(gx)),
+		((std::floor(gy - 1) * 14) + std::ceil(gx)),
+		((std::floor(gy) * 14) + std::ceil(gx + 1)),
 		((std::floor(gy) * 14) + std::ceil(gx)),
+		((std::ceil(gy + 1) * 14) + std::floor(gx)),
+		((std::ceil(gy) * 14) + std::floor(gx - 1)),
 		((std::ceil(gy) * 14) + std::floor(gx)),
+		((std::ceil(gy + 1) * 14) + std::ceil(gx)),
+		((std::ceil(gy) * 14) + std::ceil(gx + 1)),
 		((std::ceil(gy) * 14) + std::ceil(gx))
 	};
 
-	for (int i = 0; i < 4; i++)
+	SDL_Rect futureEnemyRect;
+	futureEnemyRect.x = mCollider.x + mVelX;
+	futureEnemyRect.y = mCollider.y + mVelY;
+	futureEnemyRect.w = mCollider.w;
+	futureEnemyRect.h = mCollider.h;
+
+	for (int i = 0; i < SLOT; i++)
 	{
 		if (gCheck[i] >= 0 && gCheck[i] < 14 * 18)
 		{
@@ -204,51 +272,82 @@ void EnemyEntity::checkStageCollision(std::vector<TileEntity> vTile)
 
 			//SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0x00);
 			//SDL_RenderFillRect(gRenderer, &rectCheck);
-
-			if (vTile[gCheck[i]].getPassable() == false && Entity::checkCollision(rectCheck, mCollider) == true)
+			if (vTile[gCheck[i]].getPassable() == false && Entity::checkCollision(rectCheck, futureEnemyRect) == true)
 			{
-				mCollider.x -= mVelX;
-				mCollider.y -= mVelY;
+				if (mVelX < 0) mCollider.x = rectCheck.x + 32;
+				if (mVelX > 0) mCollider.x = rectCheck.x - 32;
+				if (mVelY < 0) mCollider.y = rectCheck.y + 32;
+				if (mVelY > 0) mCollider.y = rectCheck.y - 32;
+				return true;
 			}
 		}
 	}
+	return false;
 }
 
-bool EnemyEntity::checkEnemiesCollision(EnemySpawner enemies)
+bool EnemyEntity::snapEnemiesCollision(EnemySpawner enemies)
 {
-	SDL_Rect dest;
-	dest.x = mCollider.x;
-	dest.y = mCollider.y;
-	dest.w = 32;
-	dest.h = 32;
+	SDL_Rect futureEnemyRect;
+	futureEnemyRect.x = mCollider.x + mVelX;
+	futureEnemyRect.y = mCollider.y + mVelY;
+	futureEnemyRect.w = mCollider.w;
+	futureEnemyRect.h = mCollider.h;
+
 
 	for (int i = 0; i < enemies.pEnemySlot; i++)
 	{
-		SDL_Rect comp = enemies.vEnemy[i].getPosition();
-		if (std::abs(comp.x-dest.x) < 2 && std::abs(comp.y-dest.y) < 2)
+		SDL_Rect rectCheck = enemies.vEnemy[i].getPosition();
+		if (enemies.vEnemy[i].getActive() == false)
+		{
+			//skipped
+		}
+		else if (enemies.vEnemy[i].getWaitTime() > 0)
+		{
+			//skipped
+		}
+		else if (std::abs(rectCheck.x-mCollider.x) < 2 && std::abs(rectCheck.y-mCollider.y) < 2)
 		{
 			//skipped
 		}
 		else
 		{
-			//printf("i=%d / comp=%d,%d / self=%d,%d\n", i, comp.x, comp.y, dest.x, dest.y);
-			if ((enemies.vEnemy[i].getPosition().x - 16) % 32 == 0 && (enemies.vEnemy[i].getPosition().y - 32) % 32 == 0)
-			{
-				if (checkCollision(dest, comp))
+				if (checkCollision(futureEnemyRect, rectCheck))
 				{
+					if (mVelX < 0) mCollider.x = rectCheck.x + 32;
+					if (mVelX > 0) mCollider.x = rectCheck.x - 32;
+					if (mVelY < 0) mCollider.y = rectCheck.y + 32;
+					if (mVelY > 0) mCollider.y = rectCheck.y - 32;
+					mStuckFrame++;
 					return true;
 				}
-			}
-			else
-			{
-				if (checkCollision(dest, comp))
-				{
-					
-				}
-			}
 		}
 	}
 
+	mStuckFrame = 0;
+	return false;
+}
+
+bool EnemyEntity::checkEnemiesCollision(EnemySpawner enemies)
+{
+	for (int i = 0; i < enemies.pEnemySlot; i++)
+	{
+		SDL_Rect rectCheck = enemies.vEnemy[i].getPosition();
+		if (enemies.vEnemy[i].getActive() == false)
+		{
+			//skipped
+		}
+		else if (std::abs(rectCheck.x - mCollider.x) < 2 && std::abs(rectCheck.y - mCollider.y) < 2)
+		{
+			//skipped
+		}
+		else
+		{
+			if (checkCollision(mCollider, rectCheck))
+			{
+				return true;
+			}
+		}
+	}
 
 	return false;
 }
@@ -284,6 +383,45 @@ void EnemyEntity::addMovement(Entity::Facing dir, int x, int y)
 	vCommand.push_back(command);
 }
 
+void EnemyEntity::addRandomMovement(TileGroup tiles, int range)
+{
+	int gridX = (mCollider.x - STAGE_X_BEGIN) / 32;
+	int gridY = (mCollider.y - STAGE_Y_BEGIN) / 32;
+	int fgridX = gridX, fgridY = gridY;
+	Facing fdir;
+	bool passed = false;
+
+	while (passed == false)
+	{
+		int dir = std::rand() % 4;
+		int dist = std::rand() % range;
+
+		switch (dir)
+		{
+		case 0:
+			fdir = FACING_DOWN;
+			fgridY = gridY + dist;
+			if (fgridY > 17) fgridY = 17;
+		case 1:
+			fdir = FACING_LEFT;
+			fgridX = gridX - dist;
+			if (fgridX < 0) fgridX = 0;
+		case 2:
+			fdir = FACING_UP;
+			fgridY = gridY - dist;
+			if (fgridY < 0) fgridY = 0;
+		case 3:
+			fdir = FACING_RIGHT;
+			fgridX = gridX + dist;
+			if (fgridX > 13) fgridX = 13;
+		}
+
+		passed = tiles.vTile[(fgridY * 14) + fgridX].getPassable();
+	}
+
+	addMovement(fdir, fgridX, fgridY);
+}
+
 void EnemyEntity::clearMovement()
 {
 	vCommand.clear();
@@ -298,11 +436,31 @@ void EnemySpawner::update(TileGroup tiles, EnemySpawner enemies)
 {
 	for (int i = 0; i < pEnemySlot; i++)
 	{
-		if (profile.getLife(0) > 0 || profile.getLife(1) > 0)
+		if(vEnemy[i].getWaitTime() == 0)
 		{
-			vEnemy[i].move(enemies, tiles);
+			if (profile.getLife(0) > 0 || profile.getLife(1) > 0)
+			{
+				vEnemy[i].move(enemies, tiles);
+			}
 		}
-		vEnemy[i].update(tiles);
+
+		if ((vEnemy[i].getWaitTime() / 10) % 2 == 0)
+		{
+			vEnemy[i].update(tiles);
+		}
+			
+		if (vEnemy[i].getWaitTime() > 0)
+		{
+			if (vEnemy[i].checkEnemiesCollision(enemies) == false)
+			{
+				vEnemy[i].decrementWaitTime();
+			}
+			else if(vEnemy[i].getWaitTime() < 8)
+			{
+				vEnemy[i].setWaitTime(8);
+			}
+		}
+			
 	}
 }
 
@@ -314,4 +472,58 @@ void EnemySpawner::insertSpawnPoint(int index)
 void EnemySpawner::spawnEnemyInOrder(int index)
 {
 	vEnemy[index].init(&gMonster1Texture,gridX(vSpawnPosition[index]%14),gridY(vSpawnPosition[index]/14));
+}
+
+void EnemySpawner::spawnRandomEnemies(int count, int waitTime)
+{
+	int ncount = count;
+	std::vector<int> index;
+
+	if(mWaitTime <= 0 || waitTime == 0)
+	{
+		for (int i = 0; i < pEnemySlot; i++)
+		{
+			index.push_back(i);
+		}
+
+		std::random_shuffle(std::begin(index), std::end(index));
+
+		for (int i = 0; i < ncount; i++)
+		{
+			if (vEnemy[index[i]].getActive() == true && ncount < index.size())
+			{
+				ncount++;
+			}
+			else if(vEnemy[index[i]].getActive() == false)
+			{
+				vEnemy[index[i]].init(&gMonster1Texture, gridX(vSpawnPosition[index[i]] % 14), gridY(vSpawnPosition[index[i]] / 14));
+			}
+		}
+		
+		mWaitTime = waitTime;
+	}
+	else
+	{
+		mWaitTime--;
+	}
+}
+
+int EnemySpawner::getNumberOfEnemies()
+{
+	int count = 0;
+	for (int i = 0; i < pEnemySlot; i++)
+	{
+		if (vEnemy[i].getActive() == true)
+			count++;
+	}
+
+	return count;
+}
+
+void EnemySpawner::resetEnemies()
+{
+	for (int i = 0; i < pEnemySlot; i++)
+	{
+		vEnemy[i].setActive(false);
+	}
 }

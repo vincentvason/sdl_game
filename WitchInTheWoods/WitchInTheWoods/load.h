@@ -21,10 +21,12 @@ extern LTexture gBulletTexture;
 extern LTexture gEdificeTexture;
 extern LTexture gWallTexture;
 extern LTexture gTreeTexture;
+extern LTexture gFoeBonusTexture;
 
 //Text Bank
 extern LTexture gTextTexture;
 extern SDL_Color gTextColor_White;
+extern SDL_Color gTextColor_Red;
 
 //Starts up SDL and creates window
 bool init();

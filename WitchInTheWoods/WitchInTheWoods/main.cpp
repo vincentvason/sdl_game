@@ -29,6 +29,9 @@ int main(int argc, char* args[])
 			//While application is running
 			while (!quit)
 			{
+				//Scene Transition
+				game->sceneTransition();
+
 				//Handle events on queue
 				while (SDL_PollEvent(&e) != 0)
 				{

@@ -30,7 +30,14 @@ public:
 	void checkMoveList();
 	void updateMoveList();
 	void addMovement(Entity::Facing dir, int x, int y);
+	void addRandomMovement(TileGroup tiles, int range = 3);
 	void clearMovement();
+
+	int getWaitTime() { return mWaitTime; };
+	void setWaitTime(int waitTime) { mWaitTime = waitTime; };
+	void decrementWaitTime() {  mWaitTime--; };
+
+	bool checkEnemiesCollision(EnemySpawner enemies);
 
 protected:
 	bool isActive = false;
@@ -41,20 +48,30 @@ protected:
 
 	enum Facing mAnimFacing = FACING_DOWN;
 	float mAnimWalking = 0;
+	int mMoveFrame = 0;
+
+	int mStuckFrame = 0;
 
 	SDL_Rect mCollider;
 	LTexture* mSprite;
 
+	enum Facing mPastMove = IDLE;
+	SDL_Rect mPastCollider;
+
+	int mWaitTime = 0;
+
 	std::vector<EnemyCommand> vCommand;
 
-	void checkBorderCollision();
-	void checkStageCollision(std::vector<TileEntity> vTile);
-	bool checkEnemiesCollision(EnemySpawner enemies);
+	bool snapBorderCollision();
+	bool snapStageCollision(std::vector<TileEntity> vTile);
+	bool snapEnemiesCollision(EnemySpawner enemies);
 
 	void nextMovement();
 	
 
 private:
+	const int STUCK_LIMIT = 2;
+
 	const float DEFAULT_VEL = 1;
 	const float DEFAULT_STEP_SPEED = 0.5;
 
@@ -69,7 +86,11 @@ public:
 	void update(TileGroup tiles, EnemySpawner enemies);
 	void insertSpawnPoint(int index);
 	void spawnEnemyInOrder(int order);
+	void spawnRandomEnemies(int count, int waitTime = 0);
+	int getNumberOfEnemies();
+	void resetEnemies();
 
+	int mWaitTime = 0;
 	int pEnemySlot = 8;
 	std::vector<int> vSpawnPosition;
 	std::vector<EnemyEntity> vEnemy = std::vector<EnemyEntity>(pEnemySlot, EnemyEntity());	

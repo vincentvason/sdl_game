@@ -191,7 +191,7 @@ bool BulletGroup::checkCollisionToEnemies(EnemySpawner& enemies)
 		{
 			for (int j = 0; j < enemies.pEnemySlot; j++)
 			{
-				if (enemies.vEnemy[j].getActive() == true && Entity::checkCollision(vBullet[i].getPosition(), enemies.vEnemy[j].getPosition()) == true)
+				if (enemies.vEnemy[j].getActive() == true && enemies.vEnemy[j].getWaitTime() == 0 && Entity::checkCollision(vBullet[i].getPosition(), enemies.vEnemy[j].getPosition()) == true)
 				{
 					enemies.vEnemy[j].setActive(false);
 					vBullet[i].setActive(false);

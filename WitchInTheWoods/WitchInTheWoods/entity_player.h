@@ -42,7 +42,7 @@ private:
 	const float DEFAULT_VEL = 6;
 	const float DEFAULT_STEP_SPEED = 0.5;
 
-	const int DEFAULT_INVISIBLE_FRAME = 300;
+	const int DEFAULT_INVISIBLE_FRAME = 200;
 	const int DEFAULT_DEAD_FRAME = 300;
 
 	const int WALKING_FRAME = 3;

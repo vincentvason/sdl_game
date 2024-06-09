@@ -4,6 +4,7 @@
 
 GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 {
+	
 	if (e->key.state == SDL_PRESSED)
 	{
 		switch (e->key.keysym.sym)
@@ -30,7 +31,7 @@ GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 			profile.insertCredit(); 
 			break;
 		case SDLK_LSHIFT: 
-			if (profile.getPlayerIn(Profile::PLAYER_1) == false)
+			if (profile.getPlayerIn(Profile::PLAYER_1) == false && profile.getGameOverState() == false)
 			{ 
 				if (profile.usedCredit())
 				{
@@ -41,7 +42,7 @@ GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 			}
 			else break;
 		case SDLK_RSHIFT:
-			if (profile.getPlayerIn(Profile::PLAYER_2) == false)
+			if (profile.getPlayerIn(Profile::PLAYER_2) == false && profile.getGameOverState() == false)
 			{
 				if (profile.usedCredit())
 				{
@@ -75,13 +76,34 @@ void InGameScene::update(Game& game)
 	players.p2.setActive(profile.getPlayerIn(Profile::PLAYER_2));
 
 	//Load Stage (if it's not loaded)
-	if (isStageLoaded == false)
+	if (profile.getStageLoadedStatus() == false)
 	{
 		stage.getStageFromFile(1, tiles, enemies, players);
-		isStageLoaded = true;
+		profile.setStageLoadedStatus(true);
 
-		for (int i = 0; i < 8; i++)
-			enemies.spawnEnemyInOrder(i);
+		enemies.spawnRandomEnemies(3, 0);
+	}
+
+
+	//Spawn Enemy if they are dead
+	if (players.p1.getActive() == true || players.p2.getActive() == true)
+	{
+		if (enemies.getNumberOfEnemies() > 2)
+		{
+			enemies.spawnRandomEnemies(1, 300);
+		}
+		else if (enemies.getNumberOfEnemies() > 0)
+		{
+			enemies.spawnRandomEnemies(2, 300);
+		}
+		else
+		{
+			enemies.spawnRandomEnemies(4, 0);
+			profile.showBonusNotification();
+			profile.addScore(1000, Profile::PLAYER_1);
+			profile.addScore(1000, Profile::PLAYER_2);
+		}
+		
 	}
 
 	stage.setAllEnemiesMovement(tiles, enemies, players);
@@ -94,6 +116,34 @@ void InGameScene::update(Game& game)
 	bullets.update(tiles);
 	tiles.update();
 
+	//Notification
 	if (profile.getPlayerIn(Profile::PLAYER_1) == false && profile.getPlayerIn(Profile::PLAYER_2) == false)
 		profile.updateGameOverHUD();
+
+	profile.updatePerfectHUD();
+
+	//Time Increment
+	if (time < 100)
+	{
+		time++;
+	}
+	else
+	{
+		time = 0;
+		profile.incrementStage();
+	}
+}
+
+GameScene* InGameScene::sceneTransition(Game& game)
+{
+	if (profile.getGameOverStatus() == true)
+	{
+		profile.setGameOverStatus(false);
+		profile.setStageLoadedStatus(false);
+		profile.init();
+		players.p1.init();
+		players.p2.init();
+		enemies.resetEnemies();
+		return &menu;
+	}
 }

@@ -15,10 +15,12 @@ LTexture gBulletTexture;
 LTexture gEdificeTexture;
 LTexture gWallTexture;
 LTexture gTreeTexture;
+LTexture gFoeBonusTexture;
 
 //Text list
 LTexture gTextTexture;
 SDL_Color gTextColor_White = { 0xFF, 0xFF, 0xFF };
+SDL_Color gTextColor_Red = { 0xFF, 0x00, 0x00 };
 
 
 bool init()
@@ -135,10 +137,17 @@ bool loadMedia()
 		success = false;
 	}
 
-	//Load wall texture
+	//Load tree texture
 	if (!gTreeTexture.loadFromFile("img/tree.png"))
 	{
 		printf("Failed to load \"img/tree.png\"!\n");
+		success = false;
+	}
+
+	//Load foe-bonus texture
+	if (!gFoeBonusTexture.loadFromFile("img/foe-bonus.png"))
+	{
+		printf("Failed to load \"img/foe-bonus.png\"!\n");
 		success = false;
 	}
 

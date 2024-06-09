@@ -14,7 +14,9 @@ PlayerEntity::PlayerEntity(LTexture* sprite, int x, int y)
 void PlayerEntity::init()
 {
 	mDeadFrame = 0;
+	setInvisible(true);
 	isDead = false;
+	
 }
 
 void PlayerEntity::update(TileGroup tileGroup)
@@ -240,7 +242,7 @@ void PlayerGroup::checkEnemyCollision(EnemySpawner enemies)
 {
 	for (int ei = 0; ei < enemies.vEnemy.size(); ei++)
 	{
-		if (enemies.vEnemy[ei].getActive() == true)
+		if (enemies.vEnemy[ei].getActive() == true && enemies.vEnemy[ei].getWaitTime() == 0)
 		{
 			if(p1.getInvisible() == false)
 			{
