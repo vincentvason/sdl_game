@@ -21,14 +21,18 @@ GameScene* InGameScene::handleEvent(Game& game, SDL_Event* e)
 		switch (e->key.keysym.sym)
 		{
 		case SDLK_g: 
-			players.p1.shoot();
 			if(profile.getLife(Profile::PLAYER_1) > 0)
+			{
+				players.p1.shoot();
 				bullets.init(players.p1.getPosition(), players.p1.getFacing(), Entity::OWNER_PLAYER_1);
+				Mix_PlayChannel(1, gShootSound, 0);
+			}
 			break;
 		case SDLK_BACKSPACE:
 			return &menu;
 		case SDLK_SPACE: 
 			profile.insertCredit(); 
+			Mix_PlayChannel(3, gCreditSound, 0);
 			break;
 		case SDLK_LSHIFT: 
 			if (profile.getPlayerIn(Profile::PLAYER_1) == false && profile.getGameOverState() == false)

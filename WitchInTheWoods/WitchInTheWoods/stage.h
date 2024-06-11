@@ -33,6 +33,7 @@ protected:
 
 	std::vector<Cell> vOpenList;
 	std::vector<Cell> vCloseList;
+
 	int pLastStage = 0;
 	
 };

@@ -8,17 +8,22 @@ GameScene* MenuScene::handleEvent(Game& game, SDL_Event* e)
 		//Adjust the velocity
 		switch (e->key.keysym.sym)
 		{
-		case SDLK_SPACE: profile.insertCredit(); break;
+		case SDLK_SPACE: 
+			profile.insertCredit();
+			Mix_PlayChannel(3, gCreditSound, 0);
+			break;
 		case SDLK_LSHIFT: 
 			if (profile.usedCredit()) 
 			{ 
 				profile.setPlayerIn(Profile::PLAYER_1, true);
+				Mix_PlayChannel(0, gStartSound, 0);
 				return &ingame; 
 			}
 		case SDLK_RSHIFT:
 			if (profile.usedCredit())
 			{
 				profile.setPlayerIn(Profile::PLAYER_2, true);
+				Mix_PlayChannel(0, gStartSound, 0);
 				return &ingame;
 			}
 		}

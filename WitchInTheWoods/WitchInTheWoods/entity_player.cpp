@@ -244,27 +244,39 @@ void PlayerGroup::checkEnemyCollision(EnemySpawner enemies)
 	{
 		if (enemies.vEnemy[ei].getActive() == true && enemies.vEnemy[ei].getWaitTime() == 0)
 		{
-			if(p1.getInvisible() == false)
+			if(profile.getPlayerIn(Profile::PLAYER_1) == true && p1.getInvisible() == false)
 			{
 				if (checkCollision(p1.getPosition(), enemies.vEnemy[ei].getPosition()) == true)
 				{
 					profile.decrementLife(Profile::PLAYER_1);
 					if (profile.getLife(Profile::PLAYER_1) > 0)
+					{
 						p1.setInvisible(true);
+						Mix_PlayChannel(2, gDamageSound, 0);
+					}
 					else
+					{
 						p1.playDeadAnimation();
+						Mix_PlayChannel(2, gDieSound, 0);
+					}
 				}
 			}
 
 			if (p2.getInvisible() == false)
 			{
-				if (checkCollision(p2.getPosition(), enemies.vEnemy[ei].getPosition()) == true)
+				if (profile.getPlayerIn(Profile::PLAYER_2) == true && checkCollision(p2.getPosition(), enemies.vEnemy[ei].getPosition()) == true)
 				{
 					profile.decrementLife(Profile::PLAYER_2);
 					if (profile.getLife(Profile::PLAYER_2) > 0)
+					{
 						p2.setInvisible(true);
+						Mix_PlayChannel(2, gDamageSound, 0);
+					}
 					else
+					{
 						p2.playDeadAnimation();
+						Mix_PlayChannel(2, gDieSound, 0);
+					}
 				}
 			}
 		}

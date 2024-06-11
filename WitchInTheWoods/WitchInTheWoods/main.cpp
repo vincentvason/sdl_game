@@ -20,6 +20,12 @@ int main(int argc, char* args[])
 		}
 		else
 		{
+			printf("Sound from Zapsplat.com\n");
+			printf("Insert Credit: Space\n");
+			printf("Start Button: L-Shift\n");
+			printf("Move: W,A,S,D\n");
+			printf("Shoot: G\n");
+
 			//Main loop flag
 			bool quit = false;
 

@@ -22,6 +22,13 @@ LTexture gTextTexture;
 SDL_Color gTextColor_White = { 0xFF, 0xFF, 0xFF };
 SDL_Color gTextColor_Red = { 0xFF, 0x00, 0x00 };
 
+//Sound list
+Mix_Chunk* gShootSound;
+Mix_Chunk* gDieSound;
+Mix_Chunk* gStartSound;
+Mix_Chunk* gCreditSound;
+Mix_Chunk* gDamageSound;
+
 
 bool init()
 {
@@ -74,6 +81,13 @@ bool init()
 				if (TTF_Init() == -1)
 				{
 					printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+					success = false;
+				}
+
+				//Initialize SDL_mixer
+				if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 4, 2048) < 0)
+				{
+					printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 					success = false;
 				}
 			}
@@ -159,6 +173,47 @@ bool loadMedia()
 		success = false;
 	}
 
+	//Load music
+	gShootSound = Mix_LoadWAV("sound/shoot.wav");
+	if (gShootSound == NULL)
+	{
+		printf("Failed to load  \"sound/shoot.wav\" Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+	//Load music
+	gDieSound = Mix_LoadWAV("sound/die.wav");
+	if (gDieSound == NULL)
+	{
+		printf("Failed to load  \"sound/die.wav\" Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+	//Load music
+	gStartSound = Mix_LoadWAV("sound/start.wav");
+	if (gStartSound == NULL)
+	{
+		printf("Failed to load  \"sound/start.wav\" Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+	//Load music
+	gCreditSound = Mix_LoadWAV("sound/credit.wav");
+	if (gCreditSound == NULL)
+	{
+		printf("Failed to load  \"sound/credit.wav\" Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+	//Load music
+	gDamageSound = Mix_LoadWAV("sound/damage.wav");
+	if (gDamageSound == NULL)
+	{
+		printf("Failed to load  \"sound/damage.wav\" Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+
 	return success;
 }
 
@@ -166,10 +221,29 @@ void close()
 {
 	//Free loaded images
 	gLogoTexture.free();
+	gWitch1Texture.free();
+	gIconTexture.free();
+	gBulletTexture.free();
+	gMonster1Texture.free();
+	gEdificeTexture.free();
+	gWallTexture.free();
+	gTreeTexture.free();
 
 	//Free global font
 	TTF_CloseFont(gFont);
 	gFont = NULL;
+
+	//Free the music
+	Mix_FreeChunk(gShootSound);
+	gShootSound = NULL;
+	Mix_FreeChunk(gDieSound);
+	gDieSound = NULL;
+	Mix_FreeChunk(gStartSound);
+	gStartSound = NULL;
+	Mix_FreeChunk(gCreditSound);
+	gCreditSound = NULL;
+	Mix_FreeChunk(gCreditSound);
+	gCreditSound = NULL;
 
 	//Destroy window	
 	SDL_DestroyRenderer(gRenderer);
@@ -178,6 +252,7 @@ void close()
 	gRenderer = NULL;
 
 	//Quit SDL subsystems
+	Mix_Quit();
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();

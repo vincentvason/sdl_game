@@ -59,6 +59,7 @@ void Stage::setAllEnemiesMovement(TileGroup& tiles, EnemySpawner& enemies, Playe
 
 void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGroup& players, int ei)
 {
+
 	SDL_Rect enemyPos = enemies.vEnemy[ei].getPosition();
 	SDL_Rect playerPos;
 	bool p1Active = players.p1.getActive();
@@ -108,7 +109,7 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 	{
 		int iw = findTheLeastWeightCell();
 		q = vOpenList[iw];
-		vOpenList.erase(vOpenList.begin() + iw);
+		if(vOpenList.size() > iw) vOpenList.erase(vOpenList.begin() + iw);
 		addQSuccessorToOpenList(tiles, q, pgx, pgy);
 		//printf("dir:%d %d,%d->%d,%d\n", q.dir, q.parentX, q.parentY, q.currentX, q.currentY);
 		vCloseList.push_back(q);
@@ -116,7 +117,7 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 
 	//printf("only linked to parent\n");
 	
-	if(vCloseList.size() >= 3)
+	if(vCloseList.size() >= 2)
 	{
 		for (int i = vCloseList.size() - 2; i >= 0; i--)
 		{
@@ -126,7 +127,7 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 			}
 			else
 			{
-				vCloseList.erase(vCloseList.begin() + i);
+				if (vCloseList.size() > i) vCloseList.erase(vCloseList.begin() + i);
 			}
 		}
 	}
@@ -138,7 +139,7 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 	//printf("add movement to an enemy\n");
 	Facing currentDir = IDLE;
 	enemies.vEnemy[ei].clearMovement();
-	if (vCloseList.size() >= 3)
+	if (vCloseList.size() >= 2)
 	{
 		currentDir = vCloseList[1].dir;
 		for (int i = 2; i < vCloseList.size() - 1; i++)
@@ -163,7 +164,7 @@ void Stage::setEnemyMovement(TileGroup& tiles, EnemySpawner& enemies, PlayerGrou
 		}
 	}
 	
-	if (vCloseList.size() >= 2)
+	if (vCloseList.size() >= 1)
 	{
 		currentDir = vCloseList[vCloseList.size() - 1].dir;
 		int x = STAGE_X_BEGIN + (vCloseList[vCloseList.size() - 1].currentX * 32);

@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,6 +28,13 @@ extern LTexture gFoeBonusTexture;
 extern LTexture gTextTexture;
 extern SDL_Color gTextColor_White;
 extern SDL_Color gTextColor_Red;
+
+//Sound list
+extern Mix_Chunk* gShootSound;
+extern Mix_Chunk* gDieSound;
+extern Mix_Chunk* gStartSound;
+extern Mix_Chunk* gCreditSound;
+extern Mix_Chunk* gDamageSound;
 
 //Starts up SDL and creates window
 bool init();

@@ -168,7 +168,7 @@ void Profile::updatePerfectHUD()
 
 	SDL_Rect rect = { X, Y, gTextTexture.getWidth(), gTextTexture.getHeight() };
 	
-	if(mPerfectFreeze > 0)
+	if(mPerfectFreeze > 0 && (mPerfectFreeze / 5) % 2 == 0)
 	{
 		SDL_RenderDrawRect(gRenderer, &rect);
 		SDL_RenderFillRect(gRenderer, &rect);
