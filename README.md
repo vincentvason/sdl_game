@@ -15,6 +15,7 @@ Witch in The Woods is the top-down shooting game. You control the witch and try 
 ![image](https://github.com/vincentvason/sdl_game/assets/15789782/6425dc8c-f03d-4750-bb1a-13600e888eb2)
 
 In the current version, you can play with 1 player and 1 stage with unlimited creatures. Try your best to survive as long as possible.
+**For in-depth highlights of this project, please see the [wiki](https://github.com/vincentvason/sdl_game/wiki).**
 
 ## Witch in The Woods: Level Editor
 This project also included Level Editor which is a WPF application with C# .NET 8.0
@@ -23,6 +24,7 @@ This project also included Level Editor which is a WPF application with C# .NET 
 - Grid in Level Editor dynamically created in C# file, while layout is designed in XAML.
 
 ![image](https://github.com/vincentvason/sdl_game/assets/15789782/d40b0962-49b3-4e1d-9054-e6e4b57755be)
+**For in-depth highlights of this project, please see the [wiki](https://github.com/vincentvason/sdl_game/wiki).**
 
-For more technical information, please see the wiki.
+
 
