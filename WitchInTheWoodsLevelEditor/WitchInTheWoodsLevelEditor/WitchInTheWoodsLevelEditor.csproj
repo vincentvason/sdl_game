@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="edifice.png" />
+    <None Remove="enemy.png" />
+    <None Remove="free.png" />
+    <None Remove="player1.png" />
+    <None Remove="tree.png" />
+    <None Remove="wall.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="edifice.png" />
+    <Resource Include="enemy.png" />
+    <Resource Include="free.png" />
+    <Resource Include="player1.png" />
+    <Resource Include="tree.png" />
+    <Resource Include="wall.png" />
+  </ItemGroup>
+
+</Project>
